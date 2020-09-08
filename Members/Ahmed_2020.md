@@ -1,0 +1,3 @@
+- Name: Ali Ahmed
+- Role: Scrum Master
+- Description: The majority of my work will consist of reviewing other people's code before merging it into the main source code.
