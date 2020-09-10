@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Game from './game';
 import About from './about';
 import { StyleSheet, Text, View, Alert, Image, ImageBackground } from 'react-native';
-import Instructions from './instructions';
-import Support from './support';
+import Lobby from './lobby';
+import Contact from './contact';
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -11,26 +11,25 @@ import {
   AdMobRewarded
 } from 'expo-ads-admob';
 
-const image = { uri: 'https://www.srqmagazine.com/_images/images/srqdaily/content/20200131231349718.png' }
 export default function App() {
-  const [readyPage, setReady] = useState(false)
-  const [instructionPage, setInstruction] = useState(false)
-  const [supportPage, setSupport] = useState(false)
+  const [newRoomPage, setNewRoom] = useState(false)
+  const [joinRoomPage, setJoinRoom] = useState(false)
   const [aboutPage, setAboutPage] = useState(false)
+  const [contactPage, setContactPage] = useState(false)
   const [showAds, setShowAds] = useState(true)
-  if (readyPage) {
+  if (newRoomPage) {
     return (<Game style={{ alignItems: 'center' }} />)
-  } else if (instructionPage) {
-    return (<Instructions style={{ alignItems: 'center' }} />)
-  } else if (supportPage) {
-    return (<Support style={{ alignItems: 'center' }} />)
+  } else if (joinRoomPage) {
+    return (<Lobby style={{ alignItems: 'center' }} />)
+  } else if (contactPage) {
+    return (<Contact style={{ alignItems: 'center' }} />)
   } else if (aboutPage) {
     return (<About style={{ alignItems: 'center' }} />)
   }
   else {
     return (
       <View style={styles.container}>
-        <ImageBackground style={styles.backgroundImage} source={image}>
+        <ImageBackground style={styles.backgroundImage} source={require('../images/background.png')}>
           <Text>{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}</Text>
           {showAds
             ? <AdMobBanner
@@ -42,45 +41,44 @@ export default function App() {
               onDidFailToReceiveAdWithError={(e) => { console.log(e) }} />
             : console.log("no ads")
           }
-          <Text style={styles.title}>Escape</Text>
+          <Text style={styles.title}>Kinnect</Text>
           <Text>{"\n"}{"\n"}{"\n"}</Text>
 
           <Text style={styles.items} textStyle={styles.items} onPress={() => {
-            setReady(true)
-            setInstruction(false)
-            setSupport(false)
+            setNewRoom(true)
+            setJoinRoom(false)
             setAboutPage(false)
-          }}>Play</Text>
+            setContactPage(false)
+          }}>Create New Room</Text>
           <Text>{'\n'}</Text>
           <Text style={styles.items} textStyle={styles.items} onPress={() => {
-            setReady(false)
-            setInstruction(true)
-            setSupport(false)
+            setNewRoom(false)
+            setJoinRoom(true)
             setAboutPage(false)
-          }}>Instructions</Text>
+            setContactPage(false)
+          }}>Join A Room</Text>
           <Text>{'\n'}</Text>
           <Text style={styles.items} onPress={() => {
-            setReady(false)
-            setInstruction(false)
-            setSupport(true)
-            setAboutPage(false)
-          }}>Support</Text>
-          <Text>{'\n'}</Text>
-          <Text style={styles.items} onPress={() => {
-            setReady(false)
+            setNewRoom(false)
             setAboutPage(true)
-            setInstruction(false)
-            setSupport(false)
+            setJoinRoom(false)
+            setContactPage(false)
           }}>About Us</Text>
           <Text>{'\n'}</Text>
+          <Text style={styles.items} onPress={() => {
+            setNewRoom(false)
+            setAboutPage(false)
+            setJoinRoom(false)
+            setContactPage(true)
+          }}>Contact Us</Text>
           <Text>{'\n'}</Text>
           {
             showAds
-              ? <Text style={{position:'absolute', bottom:60}} onPress={() => {
+              ? <Text style={{ position: 'absolute', bottom: 60 }} onPress={() => {
                 setShowAds(false)
                 Alert.alert('Thank You for Your Donation')
               }}>Remove Ads $0.99</Text>
-              : <Text style={{position:'absolute', bottom:60}} onPress={() => {
+              : <Text style={{ position: 'absolute', bottom: 60 }} onPress={() => {
                 setShowAds(true)
                 Alert.alert('Please give me your money to remove ad')
               }}>Restore Purchase</Text>
@@ -101,11 +99,11 @@ const styles = StyleSheet.create({
   adContainer: {
     width: 'auto',
     position: 'absolute',
-    bottom:0
+    bottom: 0
   },
   title: {
     fontFamily: 'AmericanTypewriter-Bold',
-    fontSize: 100,
+    fontSize: 90,
     color: 'black',
 
   },
