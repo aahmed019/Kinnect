@@ -3,7 +3,7 @@ import Home from './Home'
 import { StyleSheet, Text, View, Alert, Button } from 'react-native';
 // import Button from 'apsl-react-native-button';
 
-const Support = (props) => {
+const Contact = (props) => {
   const [back, setBack] = useState(false)
   return (
     <View>
@@ -11,7 +11,7 @@ const Support = (props) => {
         !back
           ? <View style={styles.container}>
             <Text>{"\n"}</Text>
-            <Text style={styles.title}>SUPPORT PAGES</Text>
+            <Text style={styles.title}>QUESTIONS? We are Here to Answer</Text>
             <Button style={styles.items} title='Back' onPress={() => setBack(true)} />
           </View>
           : <Home />
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default Support;
+export default Contact;
