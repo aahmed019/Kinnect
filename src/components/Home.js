@@ -29,7 +29,6 @@ export default function App() {
   else {
     return (
       <View style={styles.container}>
-        <ImageBackground style={styles.backgroundImage} source={require('../images/background.png')}>
           <Text>{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}</Text>
           {showAds
             ? <AdMobBanner
@@ -42,7 +41,7 @@ export default function App() {
             : console.log("no ads")
           }
           <Text style={styles.title}>Kinnect</Text>
-          <Text>{"\n"}{"\n"}{"\n"}</Text>
+          <Text>{"\n"}</Text>
 
           <Text style={styles.items} textStyle={styles.items} onPress={() => {
             setNewRoom(true)
@@ -50,28 +49,28 @@ export default function App() {
             setAboutPage(false)
             setContactPage(false)
           }}>Create New Room</Text>
-          <Text>{'\n'}</Text>
+          
           <Text style={styles.items} textStyle={styles.items} onPress={() => {
             setNewRoom(false)
             setJoinRoom(true)
             setAboutPage(false)
             setContactPage(false)
           }}>Join A Room</Text>
-          <Text>{'\n'}</Text>
+          
           <Text style={styles.items} onPress={() => {
             setNewRoom(false)
             setAboutPage(true)
             setJoinRoom(false)
             setContactPage(false)
           }}>About Us</Text>
-          <Text>{'\n'}</Text>
+          
           <Text style={styles.items} onPress={() => {
             setNewRoom(false)
             setAboutPage(false)
             setJoinRoom(false)
             setContactPage(true)
           }}>Contact Us</Text>
-          <Text>{'\n'}</Text>
+          <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
           {
             showAds
               ? <Text style={{ position: 'absolute', bottom: 60 }} onPress={() => {
@@ -83,7 +82,6 @@ export default function App() {
                 Alert.alert('Please give me your money to remove ad')
               }}>Restore Purchase</Text>
           }
-        </ImageBackground>
       </View>
     )
   }
@@ -91,7 +89,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    backgroundColor: 'lavender',
+    backgroundColor: '#2b2d40',
     height: '100%',
     width: '100%',
     justifyContent: 'space-around',
@@ -102,17 +100,17 @@ const styles = StyleSheet.create({
     bottom: 0
   },
   title: {
-    fontFamily: 'AmericanTypewriter-Bold',
-    fontSize: 90,
-    color: 'black',
-
+    fontFamily: 'AppleSDGothicNeo-Light',
+    fontSize: 80,
+    color: 'white',
+    textAlign: 'center',
   },
 
   items: {
     fontFamily: 'AppleSDGothicNeo-UltraLight',
-    fontSize: 40,
-    color: 'black',
-    fontWeight: '800',
+    fontSize: 30,
+    color: 'white',
+    fontWeight: '300',
     textAlign: 'center',
     justifyContent: 'space-between'
   },
