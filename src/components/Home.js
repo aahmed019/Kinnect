@@ -29,7 +29,7 @@ export default function App() {
   else {
     return (
       <View style={styles.container}>
-          <Text>{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}</Text>
+          <Text>{"\n"}{"\n"}{"\n"}</Text>
           {showAds
             ? <AdMobBanner
               style={styles.adContainer}
@@ -70,7 +70,7 @@ export default function App() {
             setJoinRoom(false)
             setContactPage(true)
           }}>Contact Us</Text>
-          <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
+          <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text>
           {
             showAds
               ? <Text style={{ position: 'absolute', bottom: 60 }} onPress={() => {
