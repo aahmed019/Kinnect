@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Home from './Home';
 import { StyleSheet, Text, View, Image , Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
 // import Button from 'apsl-react-native-button';
-
+//source={require('../images/background.png')}
 const Game = (props) => {
   const [back, setBack] = useState(false)
   const [game, setGame] = useState([
@@ -12,76 +12,233 @@ const Game = (props) => {
     {name: 'game4', key: '4'},
   ])
   return (
-    <View >
+    <View>
       {
         !back
           ? 
-          <ScrollView style={styles.container} disableScrollViewPanResponder={true} >
-          <Text style={styles.title}> Games </Text>
-          <Text>{"\n"}</Text>
-          <Button textStyle={styles.items} title='BACK' onPress={() => setBack(true)} />
-      
-          <Image style={styles.GameImage} source={require('../images/background.png')}></Image>
-          <Text >{"\n"}</Text>
-          <Text style={styles.items}>Game 1</Text>
-          <Text>{"\n"}</Text>
-
-          <Image style={styles.GameImage} source={require('../images/background.png')}></Image>
-          <Text >{"\n"}</Text>
-          <Text style={styles.items}>Game 2</Text>
-          <Text>{"\n"}</Text>
-
-          <Image style={styles.GameImage} source={require('../images/background.png')}></Image>
-          <Text >{"\n"}</Text>
-          <Text style={styles.items}>Game 3</Text>
-          <Text>{"\n"}</Text>
-
-          <Image style={styles.GameImage} source={require('../images/background.png')}></Image>
-          <Text >{"\n"}</Text>
-          <Text style={styles.items}>Game 4</Text>
-          <Text>{"\n"}</Text>
-          </ScrollView>
           
-        
+          <ScrollView style={{backgroundColor:'#2b2d40'}}> 
+          
+                <Text onPress={() => setBack(true)}
+                    style={
+                        {
+                            fontSize: 30,
+                            padding: 40,
+                            backgroundColor: '#2b2d40',
+                            color:'white'
+                        }
+                    }>
+                    Back
+                </Text>
+                <Text
+                    style={
+                        {
+                            fontSize: 40,
+                            padding: 20,
+                            backgroundColor: '#2b2d40',
+                            textAlign:'center',
+                            color:'white'
+                        }
+                    }>
+                    Games
+                </Text>
+                <View style={styles.Games}>
+                
+                
+                <Image
+                    source={require('../images/background.png')}
+                    style={
+                        {
+            
+                            width: 212,
+                            height: 212
+                        }
+                    }
+                    >
+                      
+                </Image>
 
+                <Text
+                    style={
+                        {
+                          fontSize: 20,
+                          flex:1,
+                          padding: 20,
+                          backgroundColor: '#2b2d40',
+                          textAlign:'center',
+                          color:'white'
+                        }
+                    }>
+                    This is the game where you look at the color yellow
+                </Text>
+                </View>
+                <View style={styles.Games}>
+                
+                
+                <Image
+                    source={require('../images/background.png')}
+                    style={
+                        {
+            
+                            width: 212,
+                            height: 212
+                        }
+                    }
+                    >
+                      
+                </Image>
 
+                <Text
+                    style={
+                        {
+                          fontSize: 20,
+                          flex:1,
+                          padding: 20,
+                          backgroundColor: '#2b2d40',
+                          textAlign:'center',
+                          color:'white'
+                        }
+                    }>
+                    This is the game where you look at the color yellow
+                </Text>
+
+                </View>
+                <View style={styles.Games}>
+                
+                
+                <Image
+                    source={require('../images/background.png')}
+                    style={
+                        {
+            
+                            width: 212,
+                            height: 212
+                        }
+                    }
+                    >
+                      
+                </Image>
+
+                <Text
+                    style={
+                        {
+                          fontSize: 20,
+                          flex:1,
+                          padding: 20,
+                          backgroundColor: '#2b2d40',
+                          textAlign:'center',
+                          color:'white'
+                        }
+                    }>
+                    This is the game where you look at the color yellow
+                </Text>
+
+                </View>
+                <View style={styles.Games}>
+                
+                
+                <Image
+                    source={require('../images/background.png')}
+                    style={
+                        {
+            
+                            width: 212,
+                            height: 212
+                        }
+                    }
+                    >
+                      
+                </Image>
+
+                <Text
+                    style={
+                        {
+                          fontSize: 20,
+                          flex:1,
+                          padding: 20,
+                          backgroundColor: '#2b2d40',
+                          textAlign:'center',
+                          color:'white'
+                        }
+                    }>
+                    This is the game where you look at the color yellow
+                </Text>
+
+                </View>
+                <View style={styles.Games}>
+                
+                
+                <Image
+                    source={require('../images/background.png')}
+                    style={
+                        {
+            
+                            width: 212,
+                            height: 212
+                        }
+                    }
+                    >
+                      
+                </Image>
+
+                <Text
+                    style={
+                        {
+                          fontSize: 20,
+                          flex:1,
+                          padding: 20,
+                          backgroundColor: '#2b2d40',
+                          textAlign:'center',
+                          color:'white'
+                        }
+                    }>
+                    This is the game where you look at the color yellow
+                </Text>
+
+                </View>
+                <View style={styles.Games}>
+                
+                
+                <Image
+                    source={require('../images/background.png')}
+                    style={
+                        {
+            
+                            width: 212,
+                            height: 212
+                        }
+                    }
+                    >
+                      
+                </Image>
+
+                <Text
+                    style={
+                        {
+                          fontSize: 20,
+                          flex:1,
+                          padding: 20,
+                          backgroundColor: '#2b2d40',
+                          textAlign:'center',
+                          color:'white'
+                        }
+                    }>
+                    This is the game where you look at the color yellow
+                </Text>
+
+                </View>
+                
+            </ScrollView>
           : <Home/> 
       }
     </View>
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#2b2d40',
-    //alignItems: 'center',
-    paddingTop: '30%',
-    height: '600%',
-    width: '100%',
-    //justifyContent: 'center'
-  },
-  contain:{
+  Games:{
     flex: 1,
-    
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
-
-  title: {
-    fontFamily: 'AppleSDGothicNeo-UltraLight',
-    fontSize: 60,
-    paddingBottom: 60,
-    textAlign: 'center',
-    color: 'white',
-  },
-
-  items: {
-    fontFamily: 'AppleSDGothicNeo-UltraLight',
-    fontSize: 40,
-    color: 'white',
-    textAlign: 'center',
-  },
-  GameImage:{
-    height: '30%',
-    width: '60%',
-    
-  }
 })
 export default Game;
