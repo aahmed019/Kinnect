@@ -18,18 +18,33 @@ const Game = (props) => {
                     style={
                         {
                             fontSize: 30,
-                            padding: 40,
+                            padding: 30,
+                            paddingTop:'20%',
                             backgroundColor: '#2b2d40',
                             color:'white'
                         }
                     }>
                     Back
                 </Text>
+
+                <Text
+                    style={
+                        {
+                            fontSize: 50,
+                            textAlign:"center",
+                            backgroundColor: '#2b2d40',
+                            color:'white',
+                            paddingBottom: '10%',
+                        }
+                    }>
+                    Games
+                </Text>
+
           {data.map((item)=>{
               return(
               <View style={styles.Games}>
                 <Image
-                    source={item.image}
+                    source={{uri:item.image}}
                     style={
                         {
                             width: 212,
@@ -49,8 +64,9 @@ const Game = (props) => {
                           color:'white'
                         }
                     }>
-                   {item.desc}
+                   {item.desc}{'\n'}
                 </Text>
+                
                 </View>
            ); })}
           
@@ -64,7 +80,8 @@ const styles = StyleSheet.create({
   Games:{
     flex: 1,
     flexDirection: "row",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    paddingBottom:'20%',
   },
 })
 export default Game;

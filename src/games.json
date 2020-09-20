@@ -1,10 +1,9 @@
-
 [
-{"key":1,"name": "game1", "desc":"This game is the first game", "image": "require('../images/background.png')"},
-{"key":2,"name": "game2", "desc":"This game is the second game", "image": "require('../images/background.png')"},
-{"key":3,"name": "game3", "desc":"This game is the third game", "image": "require('../images/background.png')"},
-{"key":4,"name": "game4", "desc":"This game is the fourth game", "image": "require('../images/background.png')"},
-{"key":5,"name": "game5", "desc":"This game is the fifth game", "image": "require('../images/background.png')"},
-{"key":6,"name": "game6", "desc":"This game is the sixth game", "image": "require('../images/background.png')"}
-
-]
+    {"key":1,"name": "game1", "desc":"This game is the first game", "image": "https://picsum.photos/200"},
+    {"key":2,"name": "game2", "desc":"This game is the second game", "image": "https://picsum.photos/200"},
+    {"key":3,"name": "game3", "desc":"This game is the third game", "image": "https://picsum.photos/200"},
+    {"key":4,"name": "game4", "desc":"This game is the fourth game", "image": "https://picsum.photos/200"},
+    {"key":5,"name": "game5", "desc":"This game is the fifth game", "image": "https://picsum.photos/200"},
+    {"key":6,"name": "game6", "desc":"This game is the sixth game", "image": "https://picsum.photos/200"}
+    
+    ]
