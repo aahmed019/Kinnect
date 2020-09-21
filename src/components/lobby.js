@@ -11,7 +11,7 @@ const Lobby = (props) => {
         !back
           ? <View style={styles.container}>
             <Text>{"\n"}</Text>
-            <Text style={styles.title}>VROOMS</Text>
+            <Text style={styles.title}>VROOXMS</Text>
             <Button textStyle={styles.items} title='BACK' onPress={() => setBack(true)} />
           </View>
           : <Home />
