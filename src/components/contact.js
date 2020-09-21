@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
-import Home from './Home'
 import { StyleSheet, Text, View, Alert, Button } from 'react-native';
 // import Button from 'apsl-react-native-button';
 
 const Contact = (props) => {
   const [back, setBack] = useState(false)
   return (
-    <View>
-      {
-        !back
-          ? <View style={styles.container}>
-            <Text>{"\n"}</Text>
-            <Text style={styles.title}>QUESTIONS? We are Here to Answer</Text>
-            <Button style={styles.items} title='Back' onPress={() => setBack(true)} />
-          </View>
-          : <Home />
-      }
+    <View style={styles.container}>
+      <Text>{"\n"}</Text>
+      <Text style={styles.title}>QUESTIONS? We are Here to Answer</Text>
+      <Button style={styles.items} title='Back' onPress={() => props.home(false)} />
     </View>
   );
 }

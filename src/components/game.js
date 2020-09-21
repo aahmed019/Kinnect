@@ -1,35 +1,26 @@
 import React, { useState } from 'react';
-import Home from './Home';
 import data from "../games.json";
 import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
 // import Button from 'apsl-react-native-button';
 //source={require('../images/background.png')}
 const Game = (props) => {
-  const [back, setBack] = useState(false)
-
   return (
-    <View>
-      {
-        !back
-          ?
-          <ScrollView style={{ backgroundColor: '#2b2d40' }}>
-            <Text onPress={() => setBack(true)} style={style.Text}>Back</Text>
-            <Text style={style.Titles}>Games</Text>
-            {data.map((item) => {
-              return (
-                <View style={styles.Games}>
-                  <Image source={{ uri: item.image }} style={style.images} />
-                  <Text
-                    style={style.gameText}>
-                    {item.desc}{'\n'}
-                  </Text>
-                </View>
-              );
-            })}
-          </ScrollView>
-          : <Home />
-      }
-    </View>
+    <ScrollView style={{ backgroundColor: '#2b2d40' }}>
+      <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
+      <Text style={styles.Title}>Games</Text>
+      {data.map((item) => {
+        return (
+          <View style={styles.Games}>
+            <Image source={{ uri: item.image }} style={styles.Images} />
+            <Text
+              style={styles.gameText}>
+              {item.desc}{'\n'}
+            </Text>
+          </View>
+        );
+      })}
+    </ScrollView>
+
   );
 }
 const styles = StyleSheet.create({
