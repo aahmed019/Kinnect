@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Home from './Home';
-import { StyleSheet, Text, View, Alert, Button } from 'react-native';
-// import Button from 'apsl-react-native-button';
+import { StyleSheet, Text, View, Alert, Button, ScrollView } from 'react-native';
+import data from "../lobby.json";
 
 const Lobby = (props) => {
   const [back, setBack] = useState(false)
@@ -9,39 +9,96 @@ const Lobby = (props) => {
     <View>
       {
         !back
-          ? <View style={styles.container}>
-            <Text>{"\n"}</Text>
-            <Text style={styles.title}>VROOXMS</Text>
-            <Button textStyle={styles.items} title='BACK' onPress={() => setBack(true)} />
-          </View>
+          ?
+          <ScrollView style={{ backgroundColor: '#2b2d40' }}>
+            <Text onPress={() => setBack(true)}
+              style={
+                {
+                  fontSize: 30,
+                  padding: 30,
+                  paddingTop: '20%',
+                  backgroundColor: '#2b2d40',
+                  color: 'white'
+                }
+              }>
+              Back
+                </Text>
+
+            <Text
+              style={
+                {
+                  fontSize: 50,
+                  textAlign: "center",
+                  backgroundColor: '#2b2d40',
+                  color: 'white',
+                  paddingBottom: '10%',
+                }
+              }>
+              Lobbies
+                </Text>
+
+            {data.map((item) => {
+              return (
+                <View style={styles.lobby}>
+                  <Text
+                    style={
+                      {
+                        fontSize: 20,
+                        flex: 1,
+                        padding: 20,
+                        backgroundColor: '#2b2d40',
+                        textAlign: 'center',
+                        color: 'white'
+                      }
+                    }>
+                    {item.name}
+                  </Text>
+
+                  <Text
+                    style={
+                      {
+                        fontSize: 20,
+                        flex: 1,
+                        padding: 20,
+                        backgroundColor: '#2b2d40',
+                        textAlign: 'center',
+                        color: 'white'
+                      }
+                    }>
+                    {item.desc}
+                  </Text>
+
+                  <Text
+                    style={
+                      {
+                        fontSize: 20,
+                        flex: 1,
+                        padding: 20,
+                        backgroundColor: '#2b2d40',
+                        textAlign: 'center',
+                        color: 'white'
+                      }
+                    }>
+                    {item.playercount}
+                  </Text>
+
+
+                </View>
+              );
+            })}
+
+          </ScrollView>
           : <Home />
       }
     </View>
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'black',
-    alignItems: 'center',
-    paddingTop: '10%',
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center'
-  },
-  title: {
-    fontFamily: 'AppleSDGothicNeo-UltraLight',
-    fontSize: 50,
-    paddingBottom: 60,
-    textAlign: 'center',
-    color: 'red',
-  },
-
-  items: {
-    fontFamily: 'AppleSDGothicNeo-UltraLight',
-    fontSize: 30,
-    // width: 500,
-    color: 'white',
-    textAlign: 'center',
+  lobby: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingBottom: '20%',
   },
 })
 

@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import data from "../games.json";
+<<<<<<< HEAD
 import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
 // import Button from 'apsl-react-native-button';
 //source={require('../images/background.png')}
+=======
+import { StyleSheet, Text, View, Image , Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
+
+>>>>>>> master
 const Game = (props) => {
   return (
     <ScrollView style={{ backgroundColor: '#2b2d40' }}>
