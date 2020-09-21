@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import Home from './Home';
 import data from "../games.json";
 import { StyleSheet, Text, View, Image , Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
-// import Button from 'apsl-react-native-button';
-//source={require('../images/background.png')}
+
 const Game = (props) => {
   const [back, setBack] = useState(false)
   
