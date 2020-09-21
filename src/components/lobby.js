@@ -1,96 +1,67 @@
 import React, { useState } from 'react';
-import Home from './Home';
 import { StyleSheet, Text, View, Alert, Button, ScrollView } from 'react-native';
 import data from "../lobby.json";
 
 const Lobby = (props) => {
-  const [back, setBack] = useState(false)
   return (
-    <View>
-      {
-        !back
-          ?
-          <ScrollView style={{ backgroundColor: '#2b2d40' }}>
-            <Text onPress={() => setBack(true)}
+    <ScrollView style={{ backgroundColor: '#2b2d40' }}>
+      <Text onPress={() => props.home(false)} style={styles.backButton}>
+        Back
+      </Text>
+      <Text style={styles.title}>
+        Lobbies
+      </Text>
+
+      {data.map((item) => {
+        return (
+          <View style={styles.lobby}>
+            <Text
               style={
                 {
-                  fontSize: 30,
-                  padding: 30,
-                  paddingTop: '20%',
+                  fontSize: 20,
+                  flex: 1,
+                  padding: 20,
                   backgroundColor: '#2b2d40',
+                  textAlign: 'center',
                   color: 'white'
                 }
               }>
-              Back
-                </Text>
+              {item.name}
+            </Text>
+            <Text
+              style={
+                {
+                  fontSize: 20,
+                  flex: 1,
+                  padding: 20,
+                  backgroundColor: '#2b2d40',
+                  textAlign: 'center',
+                  color: 'white'
+                }
+              }>
+              {item.desc}
+            </Text>
 
             <Text
               style={
                 {
-                  fontSize: 50,
-                  textAlign: "center",
+                  fontSize: 20,
+                  flex: 1,
+                  padding: 20,
                   backgroundColor: '#2b2d40',
-                  color: 'white',
-                  paddingBottom: '10%',
+                  textAlign: 'center',
+                  color: 'white'
                 }
               }>
-              Lobbies
-                </Text>
-
-            {data.map((item) => {
-              return (
-                <View style={styles.lobby}>
-                  <Text
-                    style={
-                      {
-                        fontSize: 20,
-                        flex: 1,
-                        padding: 20,
-                        backgroundColor: '#2b2d40',
-                        textAlign: 'center',
-                        color: 'white'
-                      }
-                    }>
-                    {item.name}
-                  </Text>
-
-                  <Text
-                    style={
-                      {
-                        fontSize: 20,
-                        flex: 1,
-                        padding: 20,
-                        backgroundColor: '#2b2d40',
-                        textAlign: 'center',
-                        color: 'white'
-                      }
-                    }>
-                    {item.desc}
-                  </Text>
-
-                  <Text
-                    style={
-                      {
-                        fontSize: 20,
-                        flex: 1,
-                        padding: 20,
-                        backgroundColor: '#2b2d40',
-                        textAlign: 'center',
-                        color: 'white'
-                      }
-                    }>
-                    {item.playercount}
-                  </Text>
+              {item.playercount}
+            </Text>
 
 
-                </View>
-              );
-            })}
+          </View>
+        );
+      })}
 
-          </ScrollView>
-          : <Home />
-      }
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -100,6 +71,20 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     paddingBottom: '20%',
   },
+  title: {
+    fontSize: 50,
+    textAlign: "center",
+    backgroundColor: '#2b2d40',
+    color: 'white',
+    paddingBottom: '10%',
+  },
+  backButton: {
+    fontSize: 30,
+    padding: 30,
+    paddingTop: '20%',
+    backgroundColor: '#2b2d40',
+    color: 'white'
+  }
 })
 
 export default Lobby;
