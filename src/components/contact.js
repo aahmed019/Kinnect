@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Home from './Home'
-import { StyleSheet, Text, View, Alert, Button, TouchableOpacity  } from 'react-native';
-// import Button from 'apsl-react-native-button';
-import InputOutline from 'react-native-input-outline';
+import { StyleSheet, Text, View, TouchableOpacity , TextInput } from 'react-native';
+
 const Contact = (props) => {
   const [back, setBack] = useState(false)
+  
   return (
     <View>
       {
@@ -13,17 +13,17 @@ const Contact = (props) => {
             
             <TouchableOpacity  onPress={() => setBack(true)} style={styles.button}><Text style ={styles.buttontext}>Back</Text></TouchableOpacity>
             <Text style={styles.title}>Contact Us</Text>
-
            
-            <InputOutline  
-            style={styles.textfeild} placeholder="Name" focusedColor='black'defaultColor='grey'/>
-            <InputOutline  
-            style={styles.textfeild} placeholder="Subject" focusedColor='black'defaultColor='grey'/>
-            <InputOutline  
-            style={styles.textfeild} placeholder="Email" focusedColor='black'defaultColor='grey'/>
-            <InputOutline  
-            style={styles.textbox} placeholder="Message" focusedColor='black'defaultColor='grey'/>
-                        <Text>{"\n"}</Text>
+            <Text style={styles.tag}>Name:</Text>
+            <TextInput style={ styles.textfeild } />
+            <Text style={styles.tag}>Email:</Text>
+            <TextInput  style={ styles.textfeild } />
+            <Text style={styles.tag}>Subject:</Text>
+            <TextInput  style={ styles.textfeild } />
+            <Text style={styles.tag}>Message:</Text>
+            <TextInput  style={ styles.textbox } />
+            <Text></Text>
+
        <TouchableOpacity   style={styles.submitbutton}><Text style ={styles.buttontext}>Submit</Text></TouchableOpacity>
           
           </View>
@@ -50,6 +50,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
 
+  },
+  tag:{
+    color:"white",
+     alignSelf : 'flex-start',
+     paddingLeft: 40,
+     fontSize: 20,
   },
 
   button: {
@@ -94,11 +100,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textfeild :{
-   width : 360,
+    height: 40,
+    width: 360, 
+    backgroundColor:'white'
   },
   textbox :{
     width : 360,
     height : 200,
+    backgroundColor:'white'
    },
 })
 
