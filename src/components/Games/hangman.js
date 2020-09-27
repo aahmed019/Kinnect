@@ -35,7 +35,7 @@ const Hangman = (props) => {
         maxWrong: 6,
         images: [img0, img1, img2,img3,img4,img5,img6],
     }
-    function guessedWord(){
+    function Guess(){
         return answer.split("").map(letter => (Guessed.has(letter) ? letter : ' _ '))
     }
     
@@ -60,30 +60,37 @@ const Hangman = (props) => {
         ))
     }
     const GameOver = mistake >= defaults.maxWrong;
+    const isWinner = Guess().join("") === answer
     let gameKeys = generateKeyboard();
+
+    if(isWinner){
+        alert("You Won!")
+        setMistake(0);
+        setGuessed(new Set())
+        setAnswer(randomword())
+    }
+    else if(GameOver){
+        alert("You Lost! The answer was "+answer)
+        setMistake(0);
+        setGuessed(new Set())
+        setAnswer(randomword())
+
+    }
+
   return (
     <ScrollView style={{ backgroundColor: '#2b2d40' }}>
       <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
-  <Text style={styles.Title}>{answer}</Text>
   <Text style={styles.Text}>Wrong Guesses: {mistake} of {defaults.maxWrong}</Text>
-  <Text>{'\n\n'}</Text>
+  <Text>{'\n'}</Text>
   
   <Image style={styles.Images} source={defaults.images[mistake]}></Image>
 
   <Text style={styles.Text}>Guess the word:</Text>
   <Text style={styles.Text}>
-      {!GameOver ? guessedWord() : defaults.answer}
+      {!GameOver ? Guess() : defaults.answer}
   </Text>
   <View style={styles.Keyboard}>{gameKeys}</View>
-
-  
-  <Button title='reset' onPress={() =>{
-      setMistake(0);
-      setGuessed(new Set())
-      setAnswer(randomword())
-  } 
-  }>Reset</Button>
-  <Text>{"\n\n\n\n\n"}</Text>
+  <Text style={styles.Title}>{answer}{'\n\n'}</Text>
   
      
     </ScrollView>
@@ -91,23 +98,17 @@ const Hangman = (props) => {
 }
 
 const styles = StyleSheet.create({
-    Games: {
-      flex: 1,
-      flexDirection: "row",
-      flexWrap: "wrap",
-      paddingBottom: '20%',
-    },
     Title: {
       fontSize: 50,
       textAlign: "center",
       backgroundColor: '#2b2d40',
       color: 'white',
-      paddingBottom: '10%',
+      
     },
     Text: {
       fontSize: 30,
-      padding: 10,
-      paddingTop: '20%',
+     
+      paddingTop: '10%',
       backgroundColor: '#2b2d40',
       color: 'white',
       textAlign:'center'
