@@ -25,14 +25,15 @@ var words = [
 function randomword(){
     return words[Math.floor(Math.random() * words.length)]
 }
+
 const Hangman = (props) => {
     const[mistake, setMistake] = useState(0);
     const[Guessed, setGuessed] = useState(new Set()); //use .has, .delete, and .add
     const[answer, setAnswer] = useState(randomword())
+    const[totalGuess, setTotalGuess] = useState(0)
     const defaults= {
         maxWrong: 6,
         images: [img0, img1, img2,img3,img4,img5,img6],
-        answer: randomword()
     }
     function guessedWord(){
         return answer.split("").map(letter => (Guessed.has(letter) ? letter : ' _ '))
@@ -49,6 +50,7 @@ const Hangman = (props) => {
                 setGuessed(Guessed.add(letter))
                 console.log(Guessed)
                 setMistake(mistake + (answer.includes(letter) ? 0 : 1))
+                setTotalGuess(totalGuess+1)
             }}
             disabled={Guessed.has(letter)}
             >
@@ -73,6 +75,7 @@ const Hangman = (props) => {
       {!GameOver ? guessedWord() : defaults.answer}
   </Text>
   <View style={styles.Keyboard}>{gameKeys}</View>
+
   
   <Button title='reset' onPress={() =>{
       setMistake(0);
