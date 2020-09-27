@@ -5,6 +5,7 @@ import Functionalities from './functionalities';
 import { StyleSheet, Text, View, Alert, Image, ImageBackground } from 'react-native';
 import Lobby from './lobby';
 import Contact from './contact';
+
 import {
   AdMobBanner,
   AdMobInterstitial,
@@ -12,6 +13,7 @@ import {
   AdMobRewarded
 } from 'expo-ads-admob';
 import { Audio } from 'expo-av';
+import Hangman from './Games/hangman';
 
 
 export default function App() {
@@ -36,7 +38,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<Game
+    return (<Hangman
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {
