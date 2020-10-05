@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Game from './game';
+import Game from './newGame';
 import About from './about';
 import Functionalities from './functionalities';
 import { StyleSheet, Text, View, Alert, Image, ImageBackground } from 'react-native';
@@ -13,7 +13,8 @@ import {
   AdMobRewarded
 } from 'expo-ads-admob';
 import { Audio } from 'expo-av';
-import Hangman from './Games/hangman';
+// import Hangman from './Games/hangman';
+
 
 
 export default function App() {
@@ -38,7 +39,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<Hangman
+    return (<Game
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {
