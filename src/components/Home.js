@@ -13,7 +13,8 @@ import {
   AdMobRewarded
 } from 'expo-ads-admob';
 import { Audio } from 'expo-av';
-// import Hangman from './Games/hangman';
+import Hangman from './Games/hangman';
+import Riddle from './Games/riddle'
 
 
 
