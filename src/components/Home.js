@@ -14,6 +14,7 @@ import {
 } from 'expo-ads-admob';
 import { Audio } from 'expo-av';
 import Hangman from './Games/hangman';
+import Riddle from './Games/riddle'
 
 
 export default function App() {
@@ -38,7 +39,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<Hangman
+    return (<Riddle
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {

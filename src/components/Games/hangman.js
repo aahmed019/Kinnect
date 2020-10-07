@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
 
+
 import img0 from "../../images/hangman0.jpg"
 import img1 from "../../images/hangman1.jpg"
 import img2 from "../../images/hangman2.jpg"
@@ -64,13 +65,13 @@ const Hangman = (props) => {
     let gameKeys = generateKeyboard();
 
     if(isWinner){
-        alert("You Won!")
+        Alert("You Won!")
         setMistake(0);
         setGuessed(new Set())
         setAnswer(randomword())
     }
     else if(GameOver){
-        alert("You Lost! The answer was "+answer)
+        Alert("You Lost! The answer was "+answer)
         setMistake(0);
         setGuessed(new Set())
         setAnswer(randomword())
