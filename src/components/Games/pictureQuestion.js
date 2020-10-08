@@ -23,7 +23,7 @@ export default function pictureQuestion(props) {
   })
   const [userAnswer, setUserAnswer] = useState("")
   const [result, setResult] = useState(false)
-  const [userAttempts, setUserAttempts] = useState(0)
+  const [userAttempts, setUserAttempts] = useState(data.totalAttempts)
   return (
     <KeyboardAvoidingView style={styles.container}
       behavior="position">
@@ -51,13 +51,18 @@ export default function pictureQuestion(props) {
       />
       <Button
         title="Submit"
-        disabled={question.totalAttempts <= userAttempts ? true : false}
         onPress={() => {
           const n = userAttempts
           userAnswer == question.answer
-            ? props.rightAnswer()
-            : (setResult(false), setUserAttempts(n), alert("Wrong!"))
+            ? (props.rightAnswer(), console.log("question answered correctly"))
+            : userAttempts !== 0
+              ? (setResult(false),
+                setUserAttempts(n - 1),
+                console.log("Wrong Answer!", n, " attempt(s) left"),
+                alert("Wrong Answer"))
+              : (props.wrongAnswer())
         }} />
+
     </KeyboardAvoidingView>
   )
 }

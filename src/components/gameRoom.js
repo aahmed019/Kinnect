@@ -51,6 +51,8 @@ export default function GameRoom(props) {
     setCurrentAnswer(false)
     setInsideAQuestion(false)
     setGameOver(true)
+    setCurrentAnswer(true)
+    setNthQuestion(0)
     alert('Sorry You Lost!')
   }
 
@@ -108,7 +110,10 @@ export default function GameRoom(props) {
         <View>
           {
             questionData.type == 'picture'
-              ? <PictureQuestion data={questionData} rightAnswer={() => { tempHandleRightAnswer() }} />
+              ? <PictureQuestion
+                data={questionData}
+                rightAnswer={() => { tempHandleRightAnswer() }}
+                wrongAnswer={() => { handleWrongAnswer() }} />
               : questionType == 'hangman'
                 ? <Hangman />
                 : console.log("Unknown type")
