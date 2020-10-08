@@ -1,4 +1,4 @@
-
+[
 {
   "id": 1,
   "type": "hangman",
@@ -11,14 +11,37 @@
       "Blue",
       "Yellow", 
       "Purple"
-  ],
-  "images": [
-      "../../images/hangman0.jpg",
-      "../../images/hangman1.jpg",
-      "../../images/hangman2.jpg",
-      "../../images/hangman3.jpg",
-      "../../images/hangman4.jpg",
-      "../../images/hangman5.jpg",
-      "../../images/hangman6.jpg"
+  ]
+},
+
+{
+  "id": 2,
+  "type": "hangman",
+  "title": "Hangman",
+  "question": "What was the murder weapon?",
+  "totalAttempts": 6,
+  "words": [
+      "Gun", 
+      "Knife", 
+      "Wrench",
+      "Saw", 
+      "Axe"
+  ]
+},
+
+{
+  "id": 3,
+  "type": "hangman",
+  "title": "Hangman",
+  "question": "Was state was the murder From?",
+  "totalAttempts": 6,
+  "words": [
+      "New York", 
+      "Kentucky", 
+      "Alabama",
+      "California", 
+      "Texas"
   ]
 }
+
+]

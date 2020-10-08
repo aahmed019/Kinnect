@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, Alert, Button, SafeAreaView, TextInput }
 import PictureQuestion from './Games/pictureQuestion';
 import Hangman from './Games/hangman';
 import sampleGames from './Games/sampleQuestions.json';
+import Riddle from './Games/riddle';
 
 export default function GameRoom(props) {
   // this room will receive data from backend, then generate question type base on the data receive
@@ -114,9 +115,17 @@ export default function GameRoom(props) {
                 data={questionData}
                 rightAnswer={() => { tempHandleRightAnswer() }}
                 wrongAnswer={() => { handleWrongAnswer() }} />
-              : questionType == 'hangman'
-                ? <Hangman />
-                : console.log("Unknown type")
+              : questionData.type == 'hangman'
+                ? <Hangman
+                  data={questionData}
+                  rightAnswer={() => { tempHandleRightAnswer() }}
+                  wrongAnswer={() => { handleWrongAnswer() }} />
+                : questionData.type == 'riddle'
+                  ? <Riddle
+                    data={questionData}
+                    rightAnswer={() => { tempHandleRightAnswer() }}
+                    wrongAnswer={() => { handleWrongAnswer() }} />
+                  : console.log('works')
           }
         </View>
 
