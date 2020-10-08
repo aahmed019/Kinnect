@@ -17,22 +17,35 @@
   },
   {
     "id": 2,
-    "type": "picture",
-    "title": "Picture Question - Sample 2",
-    "question": "What is the common thing is these pictures?",
+    "type": "hangman",
+    "title": "Hangman",
+    "question": "Can you guess what's my favorite color?",
     "totalAttempts": 6,
-    "hint": "Number",
-    "answer": "Number",
-    "images": [
-      "https://i.ibb.co/nn9n5HL/clock.jpg",
-      "https://picsum.photos/150/200?random=5",
-      "https://picsum.photos/150/200?random=1",
-      "https://picsum.photos/150/200?random=2",
-      "https://picsum.photos/150/200?random=3"
+    "words": [
+        "Magenta", 
+        "Red", 
+        "Blue",
+        "Yellow", 
+        "Purple"
+    ]
+  },
+  
+  {
+    "id": 3,
+    "type": "riddle",
+    "title": "Hangman",
+    "question": "What was the murder weapon?",
+    "totalAttempts": 6,
+    "words": [
+        "Gun", 
+        "Knife", 
+        "Wrench",
+        "Saw", 
+        "Axe"
     ]
   },
   {
-    "id": 3,
+    "id": 4,
     "type": "picture",
     "title": "Picture Question - Sample 3",
     "question": "What is the common thing is these pictures?",
@@ -48,7 +61,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": 5,
     "type": "picture",
     "title": "Picture Question - Sample 4",
     "question": "What is the common thing is these pictures?",
