@@ -40,7 +40,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<Game
+    return (<Hangman
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {

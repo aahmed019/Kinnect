@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
+import hangmanData from './hangmanQ.json';
 
 
 import img0 from "../../images/hangman0.jpg"
@@ -10,31 +11,20 @@ import img4 from "../../images/hangman4.jpg"
 import img5 from "../../images/hangman5.jpg"
 import img6 from "../../images/hangman6.jpg"
 
-var words = [
-    "Lama",
-    "carbon",
-    "boron",
-    "deca",
-    "effect",
-    "fall",
-    "gone",
-    "hello",
-    "idol",
-   
-]
 
 function randomword(){
-    return words[Math.floor(Math.random() * words.length)]
+    return hangmanData.words[Math.floor(Math.random() * hangmanData.words.length)].toLowerCase()
 }
+
+console.log(hangmanData.images[0])
 
 const Hangman = (props) => {
     const[mistake, setMistake] = useState(0);
     const[Guessed, setGuessed] = useState(new Set()); //use .has, .delete, and .add
-    const[answer, setAnswer] = useState(randomword())
     const[totalGuess, setTotalGuess] = useState(0)
+    const[answer, setAnswer] = useState(randomword())
     const defaults= {
-        maxWrong: 6,
-        images: [img0, img1, img2,img3,img4,img5,img6],
+        images: [img0,img1,img2,img3,img4,img5,img6]
     }
     function Guess(){
         return answer.split("").map(letter => (Guessed.has(letter) ? letter : ' _ '))
@@ -60,35 +50,39 @@ const Hangman = (props) => {
             </Button>
         ))
     }
-    const GameOver = mistake >= defaults.maxWrong;
+    
+
+    const GameOver = mistake >= hangmanData.totalAttempts;
     const isWinner = Guess().join("") === answer
     let gameKeys = generateKeyboard();
 
     if(isWinner){
-        Alert("You Won!")
+        alert("You Won!")
         setMistake(0);
         setGuessed(new Set())
         setAnswer(randomword())
     }
+
     else if(GameOver){
-        Alert("You Lost! The answer was "+answer)
+        alert("You Lost! The answer was "+ answer)
         setMistake(0);
         setGuessed(new Set())
         setAnswer(randomword())
-
     }
 
   return (
     <ScrollView style={{ backgroundColor: '#2b2d40' }}>
       <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
-  <Text style={styles.Text}>Wrong Guesses: {mistake} of {defaults.maxWrong}</Text>
+      <Text style={styles.Text}>{hangmanData.title}:</Text>
+  <Text style={styles.Text}>{hangmanData.question}</Text>
+  <Text style={styles.Text}>Wrong Guesses: {mistake} of {hangmanData.totalAttempts}</Text>
   <Text>{'\n'}</Text>
   
   <Image style={styles.Images} source={defaults.images[mistake]}></Image>
 
-  <Text style={styles.Text}>Guess the word:</Text>
+  
   <Text style={styles.Text}>
-      {!GameOver ? Guess() : defaults.answer}
+      {!GameOver ? Guess() : answer}
   </Text>
   <View style={styles.Keyboard}>{gameKeys}</View>
   <Text style={styles.Title}>{answer}{'\n\n'}</Text>
@@ -108,7 +102,6 @@ const styles = StyleSheet.create({
     },
     Text: {
       fontSize: 30,
-     
       paddingTop: '10%',
       backgroundColor: '#2b2d40',
       color: 'white',

@@ -1,0 +1,24 @@
+
+{
+  "id": 1,
+  "type": "hangman",
+  "title": "Hangman",
+  "question": "Can you guess what's my favorite color?",
+  "totalAttempts": 6,
+  "words": [
+      "Magenta", 
+      "Red", 
+      "Blue",
+      "Yellow", 
+      "Purple"
+  ],
+  "images": [
+      "../../images/hangman0.jpg",
+      "../../images/hangman1.jpg",
+      "../../images/hangman2.jpg",
+      "../../images/hangman3.jpg",
+      "../../images/hangman4.jpg",
+      "../../images/hangman5.jpg",
+      "../../images/hangman6.jpg"
+  ]
+}
