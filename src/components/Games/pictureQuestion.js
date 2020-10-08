@@ -12,7 +12,7 @@ import { StyleSheet, Text, ScrollView, Image, Alert, Button, KeyboardAvoidingVie
 // Hint: Text
 export default function pictureQuestion(props) {
   const data = props.data
-  const [question, setQuestion] = useState({
+  const [question] = useState({
     id: data.id,
     title: data.title,
     question: data.question,
