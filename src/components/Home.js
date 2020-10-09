@@ -40,7 +40,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<Hangman
+    return (<Riddle
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {

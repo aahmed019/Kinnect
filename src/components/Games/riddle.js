@@ -4,45 +4,60 @@ import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, TextInput} fr
 
 
  const Riddle = (props) => {
+  const data = props.data
+  const [question] = useState({
+    id: data.id,
+    title: data.title,
+    riddle: data.question,
+    totalAttempts: data.totalAttempts,
+    answer: data.answer,
+    answerType: data.riddleType
+  })
+
     const[mistake, setMistake] = useState(0);
     const[Guessed, setGuessed] = useState(''); //use .has, .delete, and .add
-    const[answer] = useState('red')
-    const[totalGuess, setTotalGuess] = useState(0)
-    const defaults= {
-        maxWrong: 3,
-        riddleText: true,
-        riddle: 'what color is a firetruck?'
-    }
+    const[Winner, setWinner] = useState(false)
+    const GameOver = mistake >= question.totalAttempts;
     
-    function riddleType(){
-        return defaults.riddleText? 'text':'numeric'
+
+    if(GameOver){
+      alert("You Lost, the answer was" + answer)
+      props.rightAnswer()
     }
-
-
-    const GameOver = mistake >= defaults.maxWrong;
+    if(Winner){
+      alert("You Win")
+      props.rightAnswer()
+    }
 
   return (
 <ScrollView style={{ backgroundColor: '#2b2d40' }}>
     <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
-    <Text style={styles.Text}>Wrong Guesses: {mistake} of {defaults.maxWrong}</Text>
+    <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.totalAttempts}</Text>
     <Text>{'\n'}</Text>
   
 
     <Text style={styles.Text}>Answer the riddle:</Text>
     <Text style={styles.Text}>
-        {defaults.riddle}
+        {question.riddle}
     </Text>
     <View style={styles.Keyboard}></View>
     <TextInput
     style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-    onChangeText={text => setGuessed(text.toLowerCase())}
     value={Guessed}
+    onChangeText={text => setGuessed(text)}
     placeholder='Insert your answer here'
-    keyboardType={riddleType()}
+    keyboardType={question.answerType}
     >
-
     </TextInput>
-    <Text style={styles.Title}>{answer}{'\n\n'}</Text>
+    <Button
+        title="Submit"
+        disabled={question.totalAttempts <= mistake ? true : false}
+        onPress={() => {
+          Guessed == question.answer
+            ? setWinner(true)
+            : (setMistake(mistake+1), alert("Wrong!"))
+        }} />
+    <Text style={styles.Title}>{question.answer}{'\n\n'}</Text>
     
      
 </ScrollView>
