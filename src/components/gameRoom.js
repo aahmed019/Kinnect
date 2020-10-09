@@ -97,16 +97,16 @@ export default function GameRoom(props) {
       ? winner
         ? // if Won the game
         <View>
-          <Text>Congratulations!</Text>
+          <Text style={styles.text}>Congratulations!</Text>
         </View>
         : gameOver// If lose the game
           ?
-          <View>
-            <Text>Sorry You Lost!</Text>
+          <View >
+            <Text style={styles.text}>Sorry You Lost!</Text>
           </View>
           : // If room just created
           <View>
-            <Text onPress={() => tempGetQuestion()}>Click Here When Ready!</Text>
+            <Text onPress={() => tempGetQuestion()} style={styles.text}>Click Here When Ready!</Text>
           </View>
       : // If the user inside a question, see what type of question and render
       currentAnswer //if true that means waiting for next question
@@ -140,3 +140,28 @@ export default function GameRoom(props) {
     // render question from passed data in props, but for prototype we only need read from JSON
   )
 }
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 50,
+    textAlign: "center",
+    backgroundColor: '#2b2d40',
+    color: 'white',
+    paddingBottom: '10%',
+  },
+  backButton: {
+    fontSize: 20,
+    paddingBottom: '10%',
+    justifyContent: 'flex-start',
+    backgroundColor: '#2b2d40',
+    color: 'white'
+  },
+  text: {
+    fontSize: 20,
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#2b2d40',
+    textAlign: 'center',
+    color: 'white'
+  }
+})
