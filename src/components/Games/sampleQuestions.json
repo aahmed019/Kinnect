@@ -22,22 +22,69 @@
     "question": "Can you guess what's my favorite color?",
     "totalAttempts": 6,
     "words": [
-        "Magenta", 
-        "Red", 
-        "Blue",
-        "Yellow", 
-        "Purple"
+      "Magenta",
+      "Red",
+      "Blue",
+      "Yellow",
+      "Purple"
     ]
   },
-  
   {
     "id": 3,
+<<<<<<< HEAD
+    "type": "picture",
+    "title": "Picture Question - Sample 3",
+    "question": "What is the common thing is these pictures?",
+    "totalAttempts": 6,
+    "hint": "Number",
+    "answer": "Number",
+    "images": [
+      "https://i.ibb.co/nn9n5HL/clock.jpg",
+      "https://picsum.photos/150/200?random=6",
+      "https://picsum.photos/150/200?random=4",
+      "https://picsum.photos/150/200?random=2",
+      "https://picsum.photos/150/200?random=8"
+    ]
+  },
+  {
+    "id": 4,
+    "type": "picture",
+    "title": "Picture Question - Sample 4",
+    "question": "What is the common thing is these pictures?",
+    "totalAttempts": 6,
+    "hint": "Number",
+    "answer": "Number",
+    "images": [
+      "https://i.ibb.co/nn9n5HL/clock.jpg",
+      "https://picsum.photos/150/200?random=6",
+      "https://picsum.photos/150/200?random=4",
+      "https://picsum.photos/150/200?random=2",
+      "https://picsum.photos/150/200?random=8"
+    ]
+  },
+  {
+    "id": 5,
+    "type": "picture",
+    "title": "Picture Question - Sample 5",
+    "question": "What is the common thing is these pictures?",
+    "totalAttempts": 6,
+    "hint": "Number",
+    "answer": "Number",
+    "images": [
+      "https://i.ibb.co/nn9n5HL/clock.jpg",
+      "https://picsum.photos/150/200?random=1",
+      "https://picsum.photos/150/200?random=3",
+      "https://picsum.photos/150/200?random=5",
+      "https://picsum.photos/150/200?random=7"
+    ]
+=======
     "type": "riddle",
     "title": "Riddle",
     "question": "What can you put in a wooden box to make it lighter?",
     "totalAttempts": 3,
     "answer": "Holes", 
     "riddleType":"text"
+>>>>>>> master
   }
   
 ]
