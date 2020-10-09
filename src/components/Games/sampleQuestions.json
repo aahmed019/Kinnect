@@ -35,7 +35,8 @@
     "title": "Riddle",
     "question": "What can you put in a wooden box to make it lighter?",
     "totalAttempts": 3,
-    "answer": "Holes",
-    "riddleType": "text"
+    "answer": "Holes", 
+    "riddleType":"text"
   }
+  
 ]

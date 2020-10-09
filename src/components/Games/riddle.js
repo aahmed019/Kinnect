@@ -42,7 +42,7 @@ import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, TextInput} fr
     </Text>
     <View style={styles.Keyboard}></View>
     <TextInput
-    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+    style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
     value={Guessed}
     onChangeText={text => setGuessed(text)}
     placeholder='Insert your answer here'
