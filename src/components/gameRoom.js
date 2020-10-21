@@ -4,6 +4,7 @@ import PictureQuestion from './Games/pictureQuestion';
 import Hangman from './Games/hangman';
 import sampleGames from './Games/sampleQuestions.json';
 import Riddle from './Games/riddle';
+import * as firebase from 'firebase'
 
 export default function GameRoom(props) {
   // this room will receive data from backend, then generate question type base on the data receive
@@ -18,6 +19,13 @@ export default function GameRoom(props) {
   const [questionData, setQuestionData] = useState({}) // everything needed to render a question
   const [questionType, setQuestionType] = useState('')
 
+ 
+  //console.log(ref);
+  
+  //ref.orderByChild('id').on('child_added', function(snap){
+    //console.log(snap.val());
+    //setQuestionData(snap.val())
+  //})
   // -------------------HELPER FUNCTIONS ------------------------
   const getQuestion = (gameID, nthQUESTION, currentANSWER) => {
     currentANSWER === true
@@ -25,7 +33,7 @@ export default function GameRoom(props) {
       (
         console.log("request sent for next question"),
         // request will be sent with given information
-        setQuestionData("whatever will be received"),
+        //setQuestionData("whatever will be received"),
         setCurrentAnswer(false),
         setInsideAQuestion(true),
         setQuestionType(questionData.type)

@@ -22,7 +22,6 @@ const Hangman = (props) => {
       question: data.question,
       totalAttempts: data.totalAttempts,
       words: data.words,
-      
     })
     const[mistake, setMistake] = useState(0);
     const[Guessed, setGuessed] = useState(new Set()); //use .has, .delete, and .add

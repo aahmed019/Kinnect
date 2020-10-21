@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Game from './newGame';
 import About from './about';
 import Functionalities from './functionalities';
 import { StyleSheet, Text, View, Alert, Image, ImageBackground } from 'react-native';
 import Lobby from './lobby';
 import Contact from './contact';
+
 
 import {
   AdMobBanner,
@@ -15,7 +16,7 @@ import {
 import { Audio } from 'expo-av';
 import Hangman from './Games/hangman';
 import Riddle from './Games/riddle'
-
+import Fire from '../../firebaseConfig';
 
 
 export default function App() {
@@ -27,6 +28,9 @@ export default function App() {
   const [testingPage, setTestingPage] = useState(false)
   const [soundEffect, setSoundEffect] = useState(true)
   const [music, setMusic] = useState(true)
+  const [games, setGame] = useState([])
+
+
   const handlePlay = async () => {
     const soundObject = new Audio.Sound();
     try {
@@ -63,6 +67,7 @@ export default function App() {
       home={setTestingPage} />)
   }
   else {
+   
     return (
       <View style={styles.container}>
 
