@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import data from "../games.json";
 import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList, TextInput, Keyboard } from 'react-native';
 import Fire from '../../firebaseConfig';
 import GameRoom from './gameRoom';
-
+//for creating games
 const Game = (props) => {
-  Games = Fire.db
+  //fix errors with useEffect( games = fire.db)
+  useEffect(() =>{
+    Games = Fire.db
+  })
   const[name, setName] = useState('')
   const[playerID, setPlayerID] = useState('')
   const[created, setCreated] = useState(false)
+  const[gameCode, setGameCode] = useState('')
   const gameExpiration = {
     quarterDay: 21600000,
     halfDay: 43200000,
@@ -54,20 +58,21 @@ const Game = (props) => {
       alert("You must enter a name")
       return
     }
-    //this.setState({ disableButton: true, isLoading: true });
-
+    //Randomly generated gameID made with makeGameID function
     let newGameID = makeGameID();
     while (await isNotValidGameID(newGameID)) {
       newGameID = makeGameID();
     }
     try {
+      //creats new game table for each game
       let gameRef = Games.getRef('games');
       await gameRef.child(newGameID).set({ 
         'timestamp': Date.now(),
-        'round': '',
+        'question': 0,
+        'playerCount': '',
         'currentPlayer': '',
         'turnStartTimestamp': '',
-        'score': {'team1': 0, 'team2': 0},
+        'score': {'team': 0},
         'turnTime': 60000
       })
       console.log(`Game created. ID: ${newGameID}`);
@@ -78,10 +83,11 @@ const Game = (props) => {
       Games.getRef(`games/${newGameID}/waiting/${ref.key}`).set(name.trim());
       Games.getRef(`games/${newGameID}/host`).set({[ref.key]: name.trim()});
       setName(name.trim());
+      setGameCode(newGameID);
       
       //this.props.updateGameID(newGameID);
       await cleanDatabase();
-      setCreated(true);
+      return true;
     } 
     catch (error) {
       //this.setState({ disableButton: false, isLoading: false });
@@ -111,7 +117,6 @@ const Game = (props) => {
         validGameIDs.forEach(validID => {
           Games.getRef(`games/${validID}`).remove();
           Games.getRef(`players/${validID}`).remove();
-          Games.getRef(`words/${validID}`).remove();
         })
       }
     }
@@ -123,44 +128,58 @@ const Game = (props) => {
   }
   if(created){
     return(
-      <GameRoom/>
+    <View style={styles.container}>
+      <Text>{'\n\n\n'}</Text>
+    <GameRoom
+      style={{ alignItems: 'center' }}
+      hostid = {playerID}
+      hostname = {name}
+      gameID = {gameCode}
+      />
+      </View>)
+  }
+  else{
+    return (
+      <View style={styles.container}>
+        <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
+        <Text style={styles.Title}>Create Game</Text>
+        
+        <TextInput
+      style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
+      value={name}
+      onChangeText={text => setName(text)}
+      placeholder='Name'
+      >
+      </TextInput>
+      
+      <Button title = 'Create Game' onPress={() => test() ? setCreated(true) : console.log('did not work')}></Button>
+  
+  
+  
+        {/* {data.map((item) => {
+          return (
+            <View style={styles.Games}>
+              <Image source={{ uri: item.image }} style={styles.Images} />
+              <Text
+                style={styles.gameText}>
+                {item.desc}{'\n'}
+              </Text>
+            </View>
+          );
+        })} */}
+      </View>
+  
     );
   }
 
-  return (
-    
-    <ScrollView style={{ backgroundColor: '#2b2d40' }}>
-      <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
-      <Text style={styles.Title}>Create Game</Text>
-      
-      <TextInput
-    style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
-    value={name}
-    onChangeText={text => setName(text)}
-    placeholder='Name'
-    >
-    </TextInput>
-    
-    <Button title = 'Create Game' onPress={() => test()}></Button>
-
-
-
-      {/* {data.map((item) => {
-        return (
-          <View style={styles.Games}>
-            <Image source={{ uri: item.image }} style={styles.Images} />
-            <Text
-              style={styles.gameText}>
-              {item.desc}{'\n'}
-            </Text>
-          </View>
-        );
-      })} */}
-    </ScrollView>
-
-  );
 }
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    backgroundColor: '#2b2d40',
+    height: '100%',
+    width: '100%',
+  },
   Games: {
     flex: 1,
     flexDirection: "row",

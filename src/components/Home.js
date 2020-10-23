@@ -189,11 +189,5 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     textAlign: 'center',
     justifyContent: 'space-between'
-  },
-
-  backgroundImage: {
-    width: '100%',
-    height: '100%',
-    alignItems: "center",
-  },
+  }
 });

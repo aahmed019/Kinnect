@@ -11,9 +11,6 @@ import img5 from "../../images/hangman5.jpg"
 import img6 from "../../images/hangman6.jpg"
 
 
-
-
-
 const Hangman = (props) => {
     const data = props.data
     const [question, setQuestion] = useState({

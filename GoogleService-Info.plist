@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>563045715845-rgto2d6j8ar18j3kekc491fu30es4krc.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.563045715845-rgto2d6j8ar18j3kekc491fu30es4krc</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD2iM55KKhen8VPDDMRb8cszMDI-fXU8dA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>563045715845</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.seniorDesign.Kinnect</string>
+	<key>PROJECT_ID</key>
+	<string>kinnect-68a7e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kinnect-68a7e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:563045715845:ios:c87c0cb2211ae04c95feec</string>
+	<key>DATABASE_URL</key>
+	<string>https://kinnect-68a7e.firebaseio.com</string>
+</dict>
+</plist>

@@ -58,21 +58,27 @@ const Lobby = (props) => {
     //this.setState({ disableButton: true })
     if (await canUserJoinGame(gameID)) {
       finalizeJoin(playerName.trim(), gameID)
-      if (playerID === '') { //If host was already added, don't add again
-      // Add player to the list of players for the game
-      Games.getRef('players/' + joinCode.toUpperCase()).push(playerName)
-      .then((value) => {
-        setPlayerID(value.key)
-        // Add player to 'waiting' state to indicate (to others) they haven't submitted words
-        Games.getRef(`games/${gameID}/waiting/${value.key}`).set(playerName);
-      });
-    }
     }
   }
   function finalizeJoin(name, gameID) {
     setPlayerName(name);
     setJoinCode(gameID);
     
+  }
+
+  if(joined){
+    return(
+      <View style={styles.container}>
+        <Text>{'\n\n\n'}</Text>
+      <GameRoom
+      style={{ alignItems: 'center' }}
+      playerName = {playerName}
+      playerid = {playerID}
+      setPlayerID = {setPlayerID} 
+      gameID = {joinCode}
+      />
+      </View>
+    )
   }
 
   return (

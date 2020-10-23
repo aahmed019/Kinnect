@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Alert, Button, SafeAreaView, TextInput } from 'react-native';
 import PictureQuestion from './Games/pictureQuestion';
 import Hangman from './Games/hangman';
 import sampleGames from './Games/sampleQuestions.json';
 import Riddle from './Games/riddle';
 import * as firebase from 'firebase'
+import Fire from '../../firebaseConfig';
 
 export default function GameRoom(props) {
   // this room will receive data from backend, then generate question type base on the data receive
@@ -18,14 +19,44 @@ export default function GameRoom(props) {
   // if currentAnswer is correct, a request for next question will be sent. Once the data received, "currentAnswer" set to False
   const [questionData, setQuestionData] = useState({}) // everything needed to render a question
   const [questionType, setQuestionType] = useState('')
+  const [playerCount, setPlayerCount] = useState(0)
+  const[hostName, setHostname] = useState(props.hostname)
+  const[hostid, setHostid] = useState(props.hostid)
+  const [players, setPlayers] = useState([''])
+  const [roomCode] = useState(props.gameID.toUpperCase())
 
- 
-  //console.log(ref);
+  //similar to componentDidMount & unMount
+ useEffect(() =>{
+   Games = Fire.db
+   if(props.playerid === ''){
+    Games.getRef('players/' + roomCode).push(props.playerName)
+    .then((value) => {
+      props.setPlayerID(value.key)
+      // Add player to 'waiting' state to indicate (to others) they haven't submitted words
+      Games.getRef(`games/${roomCode}/waiting/${value.key}`).set(props.playerName);
+      //Games.getRef(`games/${roomCode}/playerCount`).FieldValue.increment(1);
+   });
+  }
+
+  //updates the next round
+  nextRound = () => {
+  //setNthQuestion(nthQuestion+1);
+  if (nthQuestion === 3) {
+    alert('you won!')
+  } else {
+      Games.getRef(`games/${props.gameID}/question`).set(nthQuestion + 1);
+   }
+  }
+
+  //Listens to round changes
+  Games.getRef(`games/${props.gameID}/question`).on('value', (snapshot) => {
+    let questState = snapshot.val();
+    console.log(questState)
+    setNthQuestion(questState);
+  });
   
-  //ref.orderByChild('id').on('child_added', function(snap){
-    //console.log(snap.val());
-    //setQuestionData(snap.val())
-  //})
+ })
+
   // -------------------HELPER FUNCTIONS ------------------------
   const getQuestion = (gameID, nthQUESTION, currentANSWER) => {
     currentANSWER === true
@@ -55,6 +86,7 @@ export default function GameRoom(props) {
         setNthQuestion(nthQuestion++),
         getQuestion(gameId, nthQuestion, currentAnswer)
       )
+      //Games.getRef(`games/${roomCode}/question`).set(nthQuestion+1);
   }
   const handleWrongAnswer = () => {
     setCurrentAnswer(false)
@@ -82,15 +114,16 @@ export default function GameRoom(props) {
   const tempHandleRightAnswer = () => {
     console.log("Answer correctly, and now at question-nth: ", nthQuestion, "/", numberOfQuestions),
       (
-        nthQuestion == numberOfQuestions - 1
+        nthQuestion == 3
           ? (setCurrentAnswer(false),
             setInsideAQuestion(false),
             setWinner(true),
             setCurrentAnswer(true),
             setNthQuestion(0))
           : (setCurrentAnswer(true),
-            setNthQuestion(nthQuestion + 1),
-            setQuestionData(sampleGames[nthQuestion + 1])
+            //setNthQuestion(nthQuestion + 1),
+            nextRound(nthQuestion),
+            setQuestionData(sampleGames[nthQuestion])
           )
       )
   }
