@@ -69,7 +69,8 @@ const Game = (props) => {
       await gameRef.child(newGameID).set({ 
         'timestamp': Date.now(),
         'question': 0,
-        'playerCount': '',
+        'status': 'lobby',
+        'playerCount': 0,
         'currentPlayer': '',
         'turnStartTimestamp': '',
         'score': {'team': 0},

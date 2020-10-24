@@ -24,6 +24,7 @@ export default function GameRoom(props) {
   const[hostid, setHostid] = useState(props.hostid)
   const [players, setPlayers] = useState([''])
   const [roomCode] = useState(props.gameID.toUpperCase())
+  const[gameStatus, setGameStatus] = useState('lobby')
 
   //similar to componentDidMount & unMount
  useEffect(() =>{
@@ -99,6 +100,7 @@ export default function GameRoom(props) {
 
   // tempGetQuestion is for prototype and to read data from JSON file not from backend
   const tempGetQuestion = () => {
+    Fire.db.getRef(`games/${props.gameID}/status`).set('in-game');
     currentAnswer
       ?
       (

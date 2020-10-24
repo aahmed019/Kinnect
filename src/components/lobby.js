@@ -22,11 +22,10 @@ const Lobby = (props) => {
         return false;
 
       }
-      else if (snapshot.val()[gameID].round !== '' 
-        //||snapshot.val()[gameID].status !== Screens.LOBBY
+      else if (snapshot.val()[gameID].question !== 0 ||snapshot.val()[gameID].status !== 'lobby'
         ) { 
         // Check to make sure game hasn't started yet
-        console.log(`Game ${snapshot.val()[gameID].round} has already started`);
+        console.log(`Game ${snapshot.val()[gameID].question} has already started`);
         //this.setState({
           //disableButton: false,
           //isLoading: false,
