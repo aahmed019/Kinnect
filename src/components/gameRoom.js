@@ -25,7 +25,8 @@ export default function GameRoom(props) {
   const [players, setPlayers] = useState([''])
   const [roomCode] = useState(props.gameID.toUpperCase())
   const[gameStatus, setGameStatus] = useState('lobby')
-
+  
+  
   //similar to componentDidMount & unMount
  useEffect(() =>{
    Games = Fire.db
@@ -35,28 +36,30 @@ export default function GameRoom(props) {
       props.setPlayerID(value.key)
       // Add player to 'waiting' state to indicate (to others) they haven't submitted words
       Games.getRef(`games/${roomCode}/waiting/${value.key}`).set(props.playerName);
-      //Games.getRef(`games/${roomCode}/playerCount`).FieldValue.increment(1);
    });
   }
 
+
   //updates the next round
-  nextRound = () => {
-  //setNthQuestion(nthQuestion+1);
+  nextRound  = () => {
   if (nthQuestion === 3) {
     alert('you won!')
   } else {
       Games.getRef(`games/${props.gameID}/question`).set(nthQuestion + 1);
+      setNthQuestion(nthQuestion + 1)
    }
   }
-
   //Listens to round changes
   Games.getRef(`games/${props.gameID}/question`).on('value', (snapshot) => {
     let questState = snapshot.val();
     console.log(questState)
     setNthQuestion(questState);
+    setQuestionData(sampleGames[questState])
+    //setQuestionType(questionData.type)
   });
-  
+
  })
+
 
   // -------------------HELPER FUNCTIONS ------------------------
   const getQuestion = (gameID, nthQUESTION, currentANSWER) => {
@@ -116,7 +119,7 @@ export default function GameRoom(props) {
   const tempHandleRightAnswer = () => {
     console.log("Answer correctly, and now at question-nth: ", nthQuestion, "/", numberOfQuestions),
       (
-        nthQuestion == 3
+        nthQuestion == 4
           ? (setCurrentAnswer(false),
             setInsideAQuestion(false),
             setWinner(true),
@@ -134,6 +137,8 @@ export default function GameRoom(props) {
   // Is it inside a question?
   // True => What type
   // False => Because of room just created or the game ended ?
+  
+
   return (
     // <Button title="Exit" onPress={() => { setExit(true) }} />
     !insideAQuestion
@@ -160,22 +165,22 @@ export default function GameRoom(props) {
         :
         <View>
           {
-            questionData.type == 'picture'
-              ? <PictureQuestion
-                data={questionData}
-                rightAnswer={() => { tempHandleRightAnswer() }}
-                wrongAnswer={() => { handleWrongAnswer() }} />
-              : questionData.type == 'hangman'
-                ? <Hangman
-                  data={questionData}
-                  rightAnswer={() => { tempHandleRightAnswer() }}
-                  wrongAnswer={() => { handleWrongAnswer() }} />
-                : questionData.type == 'riddle'
-                  ? <Riddle
-                    data={questionData}
-                    rightAnswer={() => { tempHandleRightAnswer() }}
-                    wrongAnswer={() => { handleWrongAnswer() }} />
-                  : console.log('works')
+              nthQuestion == '0'
+               ? <PictureQuestion
+                   data={sampleGames[nthQuestion]}
+                   rightAnswer={() => { tempHandleRightAnswer() }}
+                   wrongAnswer={() => { handleWrongAnswer() }} />
+                  : nthQuestion == '1'
+                   ? <Hangman
+                     data={sampleGames[nthQuestion]}
+                     rightAnswer={() => { tempHandleRightAnswer() }}
+                     wrongAnswer={() => { handleWrongAnswer() }} />
+                   : nthQuestion == '2'
+                     ? <Riddle
+                       data={sampleGames[nthQuestion]}
+                       rightAnswer={() => { tempHandleRightAnswer() }}
+                       wrongAnswer={() => { handleWrongAnswer() }} />
+                     : console.log('works')
           }
         </View>
 
