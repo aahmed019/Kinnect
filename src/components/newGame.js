@@ -136,6 +136,7 @@ const Game = (props) => {
       hostid = {playerID}
       hostname = {name}
       gameID = {gameCode}
+      home = {props.home}
       />
       </View>)
   }

@@ -58,6 +58,17 @@ export default function GameRoom(props) {
     //setQuestionType(questionData.type)
   });
 
+
+  deletePlayers = () =>{
+    Games.getRef(`players/${props.gameID}`).remove()
+    .then(()=> {
+      console.log(`Players from (${props.gameID}) were deleted`);
+      })
+    .catch((error) => 'Player deletion failed: ' + error.message);
+
+    props.home(false)
+  }
+
  })
 
 
@@ -80,6 +91,7 @@ export default function GameRoom(props) {
     setCurrentAnswer(true)
     console.log("currently at ", nthQuestion, "/", numberOfQuestions)
     nthQuestion == numberOfQuestions - 1
+    console.log(numberOfQuestions + 'this number of')
       ? //if current question is last question => they won
       (
         setWinner(true),
@@ -103,7 +115,7 @@ export default function GameRoom(props) {
 
   // tempGetQuestion is for prototype and to read data from JSON file not from backend
   const tempGetQuestion = () => {
-    Fire.db.getRef(`games/${props.gameID}/status`).set('in-game');
+    Games.getRef(`games/${props.gameID}/status`).set('in-game');
     currentAnswer
       ?
       (
@@ -119,12 +131,12 @@ export default function GameRoom(props) {
   const tempHandleRightAnswer = () => {
     console.log("Answer correctly, and now at question-nth: ", nthQuestion, "/", numberOfQuestions),
       (
-        nthQuestion == 4
+        nthQuestion == numberOfQuestions - 1
           ? (setCurrentAnswer(false),
             setInsideAQuestion(false),
             setWinner(true),
-            setCurrentAnswer(true),
-            setNthQuestion(0))
+            setCurrentAnswer(true))
+            //setNthQuestion(0))
           : (setCurrentAnswer(true),
             //setNthQuestion(nthQuestion + 1),
             nextRound(nthQuestion),
@@ -132,6 +144,21 @@ export default function GameRoom(props) {
           )
       )
   }
+
+  const exitGame = () => {
+
+    
+    Games.getRef(`games/${props.gameID}`).remove()
+    .then(()=> {
+      console.log(`Game (${props.gameID}) was deleted`);
+      })
+    .catch((error) => 'Game deletion failed: ' + error.message);  
+
+    deletePlayers()
+
+    props.home(false)
+  }
+  
   // -------------------END OF HELPER FUNCTIONS-------------------
   // -------------------RENDERING CASES---------------------------
   // Is it inside a question?
@@ -146,11 +173,14 @@ export default function GameRoom(props) {
         ? // if Won the game
         <View>
           <Text style={styles.text}>Congratulations!</Text>
+
+          <Text onPress={() => exitGame()} style={styles.Text}>Back</Text>
         </View>
         : gameOver// If lose the game
           ?
           <View >
             <Text style={styles.text}>Sorry You Lost!</Text>
+            <Text style={styles.text} onPress={() => exitGame()} style={styles.Text}>Back</Text>
           </View>
           : // If room just created
           <View>
@@ -180,6 +210,7 @@ export default function GameRoom(props) {
                        data={sampleGames[nthQuestion]}
                        rightAnswer={() => { tempHandleRightAnswer() }}
                        wrongAnswer={() => { handleWrongAnswer() }} />
+                       
                      : console.log('works')
           }
         </View>
