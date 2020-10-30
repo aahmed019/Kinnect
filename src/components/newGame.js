@@ -71,6 +71,7 @@ const Game = (props) => {
         'question': 0,
         'status': 'lobby',
         'playerCount': 0,
+        'GameCode': newGameID,
         'currentPlayer': '',
         'turnStartTimestamp': '',
         'score': {'team': 0},
@@ -82,7 +83,7 @@ const Game = (props) => {
       setPlayerID(ref.key)
       // Add player to 'waiting' state to indicate (to others) they haven't submitted words
       Games.getRef(`games/${newGameID}/waiting/${ref.key}`).set(name.trim());
-      Games.getRef(`games/${newGameID}/host`).set({[ref.key]: name.trim()});
+      Games.getRef(`games/${newGameID}/host`).set(name.trim());
       setName(name.trim());
       setGameCode(newGameID);
       

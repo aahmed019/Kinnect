@@ -1,21 +1,43 @@
-import React, { useState } from 'react';
+import { setAudioModeAsync } from 'expo-av/build/Audio';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Alert, Button, ScrollView, TextInput } from 'react-native';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
 import GameRoom from './gameRoom';
 const Lobby = (props) => {
-  Games = Fire.db
+  
   const [startGame, setStartGame] = useState(false)
   const [inGame, setInGame] = useState(false)
   const[playerName, setPlayerName] = useState('')
   const[playerID, setPlayerID] = useState('')
   const[joinCode, setJoinCode] = useState('')
   const[joined, setJoined] = useState(false)
+  const[host, setHost] = useState('')
+  const[status, setStatus] = useState('')
+  const[GameCode, setGameCode] = useState('')
+  const[playerCount, setPlayerCount] = useState(0)
+
+  useEffect(() =>{
+    Games = Fire.db
+    //var gamess = Fire.db.getRef("games/")
+    Games.getRef("games/").on("child_added", function(data){
+      var newGame = data.val();
+      setHost(newGame.host)
+      setStatus(newGame.status)
+      setPlayerCount(newGame.playerCount)
+      setGameCode(newGame.GameCode)
+      //console.log("Host " + newGame.host)
+      //console.log("Status " + newGame.status)
+      //console.log("player count " + newGame.playerCount)
+      //console.log("Game Code: " + newGame.GameCode)
+
+    })
+  })
   
   canUserJoinGame = async (gameID) => { 
     console.log('Checking if game is valid...');
     try {
-      let snapshot = await Games.getRef(`games`).orderByKey().equalTo(gameID).once('value');
+      let snapshot = await Games.getRef(`games`).orderByChild().equalTo(gameID).once('value');
       if (snapshot.val() == null) { 
         // Check if the game exists
         console.log(`Game ${gameID} does not exist`);
@@ -26,11 +48,6 @@ const Lobby = (props) => {
         ) { 
         // Check to make sure game hasn't started yet
         console.log(`Game ${snapshot.val()[gameID].question} has already started`);
-        //this.setState({
-          //disableButton: false,
-          //isLoading: false,
-          //error: `Uh oh, it looks like that game has already started`
-        //});
         alert('Game Already Started')
         return false;
       }
@@ -80,14 +97,24 @@ const Lobby = (props) => {
     )
   }
 
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       
 
   <Text>{'\n\n\n\n'}</Text>
-      <Text style={styles.Title}>Joining a game</Text>
-      
+      <Text style={styles.title}>Joining a game</Text>
 
+      <View>
+  <Text style={styles.title}>{host}</Text>
+  <Text style={styles.title}>{status}</Text>
+  <Text style={styles.title}>{playerCount}</Text>
+  <Text style={styles.title}>{GameCode}</Text>
+  <Text>{'\n\n\n\n'}</Text>
+    </View>
+     
+      
+    {/*
       <TextInput
     style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
     value={playerName}
@@ -106,15 +133,10 @@ const Lobby = (props) => {
     
     <Button title = 'Join Game' onPress={() => pressSubmit()}></Button>
 
-    <Button title="Back" onPress={() => props.home(false)} style={styles.backButton} />
+    <Button title="Back" onPress={() => props.home(false)} style={styles.backButton} />*/}
         
 
-          {/* this part will be replace with data loaded from backend, each game should have their own Unique ID, so when pressed, the ID is sent to retrieve game information */}
-
-          {/* QUESTION 1: SHOULD PLAYER BE ABLE TO REJOIN THE GAME IF THE APPLICATION CRASHED? If so we need a new wireframe for that page
-QUETION2 : .... */}
-
-      </View>
+      </ScrollView>
 
   );
 }
