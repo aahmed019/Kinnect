@@ -17,6 +17,7 @@
     "expo-permissions": "~8.0.0",
     "firebase": "^7.24.0",
     "firebase-app": "0.0.1",
+    "node-watch": "^0.7.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
