@@ -24,7 +24,9 @@ const Lobby = (props) => {
   const gamesList = useRef(null)
   const[read, setRead] = useState(false)
   const[loading, setLoading] = useState(true)
+  const[update, setUpdate] = useState(false)
   
+  setTimeout(() =>{setLoading(false)},1000)
 
 
   useEffect(() =>{
@@ -36,10 +38,14 @@ const Lobby = (props) => {
       tempData.push({ key: key, value: value })
       gamesList.current = tempData
       setRead(true)
+      setUpdate(false)
+      console.log("--------------------------->"+tempData)
     })
-    //Time to allow data to populate (1 second loading page)
-    setTimeout(() =>{setLoading(false)},1000)
     
+    Games.getRef(`games/`).on("child_changed", snap =>{
+      setUpdate(true)
+
+    })
   })
   
   
@@ -148,7 +154,7 @@ const Lobby = (props) => {
   
               <View style={styles.singleGame}>
               <Text style={styles.text}>status: {gamesList.current[i].value.status}</Text>
-              <Button title ="Join" onPress ={() => {setJoinCode(gamesList.current[i].key), setJoining(true)}}></Button>
+              <Button title ="Join" onPress ={() => {setJoinCode(gamesList.current[i].key), setJoining(true)}} disabled={gamesList.current[i].value.playerCount >= 4 ? true : false}></Button>
               </View>
   
           <Text>{'\n\n'}</Text>
