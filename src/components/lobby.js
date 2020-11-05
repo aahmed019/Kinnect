@@ -11,23 +11,23 @@ const Lobby = (props) => {
   let Games = Fire.db
   const [startGame, setStartGame] = useState(false)
   const [inGame, setInGame] = useState(false)
-  const[playerName, setPlayerName] = useState('')
-  const[playerID, setPlayerID] = useState('')
-  const[joinCode, setJoinCode] = useState('')
-  const[joined, setJoined] = useState(false)
+  const [playerName, setPlayerName] = useState('')
+  const [playerID, setPlayerID] = useState('')
+  const [joinCode, setJoinCode] = useState('')
+  const [joined, setJoined] = useState(false)
   const [joining, setJoining] = useState(false)
-  const[host, setHost] = useState('')
-  const[status, setStatus] = useState('')
-  const[GameCode, setGameCode] = useState('')
-  const[playerCounter, setPlayerCounter] = useState(0)
-  const[gameCount, setGameCount] = useState(0)
+  const [host, setHost] = useState('')
+  const [status, setStatus] = useState('')
+  const [GameCode, setGameCode] = useState('')
+  const [playerCounter, setPlayerCounter] = useState(0)
+  const [gameCount, setGameCount] = useState(0)
   const gamesList = useRef(null)
-  const[read, setRead] = useState(false)
-  const[loading, setLoading] = useState(true)
-  
+  const [read, setRead] = useState(false)
+  const [loading, setLoading] = useState(true)
 
 
-  useEffect(() =>{
+
+  useEffect(() => {
     Games = Fire.db
     var tempData = []
     Games.getRef("games/").on("child_added", data => {
@@ -38,21 +38,21 @@ const Lobby = (props) => {
       setRead(true)
     })
     //Time to allow data to populate (1 second loading page)
-    setTimeout(() =>{setLoading(false)},1000)
-    
+    setTimeout(() => { setLoading(false) }, 1000)
+
   })
-  
-  
-  canUserJoinGame = async (gameID) => { 
+
+
+  canUserJoinGame = async (gameID) => {
     console.log('Checking if game is valid...');
     try {
       let snapshot = await Games.getRef(`games`).orderByChild("GameCode").equalTo(gameID).once('value');
-      if (snapshot.val() == null) { 
+      if (snapshot.val() == null) {
         // Check if the game exists
         console.log(`Game ${gameID} does not exist`);
         return false;
       }
-      else if (snapshot.val()[gameID].question !== 0 ||snapshot.val()[gameID].status !== 'lobby') { 
+      else if (snapshot.val()[gameID].question !== 0 || snapshot.val()[gameID].status !== 'lobby') {
         // Check to make sure game hasn't started yet
         console.log(`Game ${snapshot.val()[gameID].question} has already started`);
         alert('Game Already Started')
@@ -67,7 +67,7 @@ const Lobby = (props) => {
       setJoined(true);
       return true;
 
-    } catch{
+    } catch {
       //console.error(error);
       console.log(`Could not check if game ${gameID} exists`);
       return false;
@@ -90,77 +90,81 @@ const Lobby = (props) => {
     setJoinCode(gameID);
   }
   //Joining game
-  if(joined){
-    return(
+  if (joined) {
+    return (
       <View style={styles.container}>
         <Text>{'\n\n\n'}</Text>
-      <GameRoom
-      style={{ alignItems: 'center' }}
-      playerName = {playerName}
-      playerid = {playerID}
-      setPlayerID = {setPlayerID} 
-      gameID = {joinCode}
-      home = {props.home}
-      />
+        <GameRoom
+          style={{ alignItems: 'center' }}
+          playerName={playerName}
+          playerid={playerID}
+          setPlayerID={setPlayerID}
+          gameID={joinCode}
+          home={props.home}
+        />
       </View>
     )
   }
   //Loading page
-  if(loading){
-    return(
+  if (loading) {
+    return (
       <View style={styles.container}>
         <Text>{'\n\n\n'}</Text>
-      <Text style={styles.title}>Loading ...</Text>
+        <Text style={styles.title}>Loading ...</Text>
       </View>
     )
   }
   return (
     <ScrollView style={styles.container}>
-      
-      
-  <Text>{'\n\n\n\n'}</Text>
-  <Button title="Back" onPress={() => props.home(false)} style={styles.backButton} />
+
+
+      <Text>{'\n\n\n\n'}</Text>
+      <Button title="Back" onPress={() => props.home(false)} style={styles.backButton} />
       <Text style={styles.title}>Joining a game</Text>
 
       <View>
         {
           read
-          ? joining
-          ?
-          <View>
-          <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
-          value={playerName}
-          onChangeText={name => setPlayerName(name)}
-          placeholder='Enter your name'
-          >
-          </TextInput>
-          
-          <Button title = 'Join Game' onPress={() => pressSubmit()}></Button>
+            ? joining
+              ?
+              <View>
+                <TextInput
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
+                  value={playerName}
+                  onChangeText={name => setPlayerName(name)}
+                  placeholder='Enter your name'
+                >
+                </TextInput>
 
-          </View>
-            : gamesList.current.map((el, i) =>
-            <View key={gamesList.current[i].key}>
-              <View style={styles.singleGame}>
-              <Text style={styles.text}>{gamesList.current[i].value.host}</Text>
-              <Text style={styles.text}>{gamesList.current[i].value.playerCount}/4</Text>
-              </View>
-  
-              <View style={styles.singleGame}>
-              <Text style={styles.text}>status: {gamesList.current[i].value.status}</Text>
-              <Button title ="Join" onPress ={() => {setJoinCode(gamesList.current[i].key), setJoining(true)}}></Button>
-              </View>
-  
-          <Text>{'\n\n'}</Text>
-            </View>
-            )
+                <Button title='Join Game' onPress={() => pressSubmit()}></Button>
 
-          : console.log('should not get here')
-          
-        }     
- 
-    </View>
-      </ScrollView>
+              </View>
+              : gamesList.current.map((el, i) =>
+                <View key={gamesList.current[i].key}>
+                  <View style={styles.singleGame}>
+                    <Text style={styles.text}>{gamesList.current[i].value.host}</Text>
+                    <Text style={styles.text}>{gamesList.current[i].value.playerCount}/4</Text>
+                  </View>
+
+                  <View style={styles.singleGame}>
+                    <Text style={styles.text}>status: {gamesList.current[i].value.status}</Text>
+                    <Button
+                      title="Join"
+                      onPress={() => { setJoinCode(gamesList.current[i].key), setJoining(true) }}
+                      disabled={gamesList.current[i].value.playerCount >= 4 ? true : false}
+                    ></Button>
+                  </View>
+
+                  <Text>{'\n\n'}</Text>
+                </View>
+              )
+
+            : console.log('should not get here')
+
+        }
+
+      </View>
+    </ScrollView>
 
   );
 }
