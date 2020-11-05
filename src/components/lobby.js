@@ -52,8 +52,7 @@ const Lobby = (props) => {
         console.log(`Game ${gameID} does not exist`);
         return false;
       }
-      else if (snapshot.val()[gameID].question !== 0 ||snapshot.val()[gameID].status !== 'lobby'
-        ) { 
+      else if (snapshot.val()[gameID].question !== 0 ||snapshot.val()[gameID].status !== 'lobby') { 
         // Check to make sure game hasn't started yet
         console.log(`Game ${snapshot.val()[gameID].question} has already started`);
         alert('Game Already Started')
@@ -61,6 +60,8 @@ const Lobby = (props) => {
       }
       else if (snapshot.val()[gameID].playerCount == 4) {
         console.log('Max player count reached')
+        alert('Game is full')
+        return false;
       }
       console.log('it worked')
       setJoined(true);
