@@ -24,7 +24,7 @@ const Lobby = (props) => {
   const gamesList = useRef(null)
   const[read, setRead] = useState(false)
   const[loading, setLoading] = useState(true)
-  const increment = firebase.firestore.FieldValue.increment(1)
+  
 
 
   useEffect(() =>{
@@ -83,6 +83,7 @@ const Lobby = (props) => {
     }
   }
   function finalizeJoin(name, gameID) {
+    Games.getRef('games/' + gameID + '/playerCount').set(firebase.database.ServerValue.increment(1))
     Games.getRef('players/' + gameID).push(name)
     setPlayerName(name);
     setJoinCode(gameID);
