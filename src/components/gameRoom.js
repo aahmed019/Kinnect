@@ -22,24 +22,14 @@ export default function GameRoom(props) {
   const [playerCount, setPlayerCount] = useState(0)
   const[hostName, setHostname] = useState(props.hostname)
   const[hostid, setHostid] = useState(props.hostid)
-  const [players, setPlayers] = useState([''])
+  const [player, setPlayer] = useState(props.playerid)
   const [roomCode] = useState(props.gameID.toUpperCase())
   const[gameStatus, setGameStatus] = useState('lobby')
-  
+
   
   //similar to componentDidMount & unMount
  useEffect(() =>{
    Games = Fire.db
-   if(props.playerid === ''){
-    Games.getRef('players/' + roomCode).push(props.playerName)
-    .then((value) => {
-      props.setPlayerID(value.key)
-      // Add player to 'waiting' state to indicate (to others) they haven't submitted words
-      Games.getRef(`games/${roomCode}/waiting/${value.key}`).set(props.playerName);
-   });
-  }
-
-
   //updates the next round
   nextRound  = () => {
   if (nthQuestion === 3) {
@@ -131,7 +121,7 @@ export default function GameRoom(props) {
   const tempHandleRightAnswer = () => {
     console.log("Answer correctly, and now at question-nth: ", nthQuestion, "/", numberOfQuestions),
       (
-        nthQuestion == numberOfQuestions - 1
+        nthQuestion == numberOfQuestions
           ? (setCurrentAnswer(false),
             setInsideAQuestion(false),
             setWinner(true),
@@ -164,7 +154,7 @@ export default function GameRoom(props) {
   // Is it inside a question?
   // True => What type
   // False => Because of room just created or the game ended ?
-  
+  //Loading page
 
   return (
     // <Button title="Exit" onPress={() => { setExit(true) }} />

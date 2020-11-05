@@ -31,7 +31,6 @@ import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, TextInput} fr
 
   return (
 <ScrollView style={{ backgroundColor: '#2b2d40' }}>
-    <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
     <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.totalAttempts}</Text>
     <Text>{'\n'}</Text>
   

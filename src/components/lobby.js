@@ -5,7 +5,7 @@ import { Header } from 'react-native/Libraries/NewAppScreen';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
 import GameRoom from './gameRoom';
-
+import * as firebase from 'firebase'
 
 const Lobby = (props) => {
   let Games = Fire.db
@@ -19,11 +19,12 @@ const Lobby = (props) => {
   const[host, setHost] = useState('')
   const[status, setStatus] = useState('')
   const[GameCode, setGameCode] = useState('')
-  const[playerCount, setPlayerCount] = useState(0)
+  const[playerCounter, setPlayerCounter] = useState(0)
   const[gameCount, setGameCount] = useState(0)
   const gamesList = useRef(null)
   const[read, setRead] = useState(false)
   const[loading, setLoading] = useState(true)
+  const increment = firebase.firestore.FieldValue.increment(1)
 
 
   useEffect(() =>{
@@ -46,7 +47,6 @@ const Lobby = (props) => {
     console.log('Checking if game is valid...');
     try {
       let snapshot = await Games.getRef(`games`).orderByChild("GameCode").equalTo(gameID).once('value');
-      console.log(snapshot.val())
       if (snapshot.val() == null) { 
         // Check if the game exists
         console.log(`Game ${gameID} does not exist`);
@@ -58,6 +58,9 @@ const Lobby = (props) => {
         console.log(`Game ${snapshot.val()[gameID].question} has already started`);
         alert('Game Already Started')
         return false;
+      }
+      else if (snapshot.val()[gameID].playerCount == 4) {
+        console.log('Max player count reached')
       }
       console.log('it worked')
       setJoined(true);
@@ -75,19 +78,14 @@ const Lobby = (props) => {
       alert('You must enter a name')
       return
     }
-    if (gameID.length !== 4) {
-      alert('game code should be 4 characters')
-      return
-    }
-    //this.setState({ disableButton: true })
     if (await canUserJoinGame(gameID)) {
       finalizeJoin(playerName.trim(), gameID)
     }
   }
   function finalizeJoin(name, gameID) {
+    Games.getRef('players/' + gameID).push(name)
     setPlayerName(name);
     setJoinCode(gameID);
-    
   }
   //Joining game
   if(joined){
@@ -132,13 +130,12 @@ const Lobby = (props) => {
           style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
           value={playerName}
           onChangeText={name => setPlayerName(name)}
-          placeholder='Enter Game Code'
+          placeholder='Enter your name'
           >
           </TextInput>
           
           <Button title = 'Join Game' onPress={() => pressSubmit()}></Button>
-      
-          <Button title="Back" onPress={() => props.home(false)} style={styles.backButton} />
+
           </View>
             : gamesList.current.map((el, i) =>
             <View key={gamesList.current[i].key}>

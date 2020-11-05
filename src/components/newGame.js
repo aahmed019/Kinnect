@@ -70,11 +70,10 @@ const Game = (props) => {
         'timestamp': Date.now(),
         'question': 0,
         'status': 'lobby',
-        'playerCount': 0,
+        'playerCount': 1,
         'GameCode': newGameID,
         'currentPlayer': '',
         'turnStartTimestamp': '',
-        'score': {'team': 0},
         'turnTime': 60000
       })
       console.log(`Game created. ID: ${newGameID}`);
