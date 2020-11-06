@@ -29,25 +29,23 @@ export default function pictureQuestion(props) {
       behavior="position">
       <Text style={styles.title}>{question.title}</Text>
       <Text style={styles.question}>{question.question}</Text>
-      <ScrollView style={styles.imageArea} horizontal={true} >
-    
-      {
-          question.images.map((item, index) => {
-            console.log(item)
-            return (
-              <ScrollView key={index} horizontal ={true}>
-                <Image
-                  style={{ width: 300, height: 300 }}
-                  source={{uri: item}} />
-              </ScrollView>
-            )
-          })
-        }
-      </ScrollView>
+      <View>
+        <ScrollView style={styles.imageArea} horizontal={true} >
 
-
-     
-
+          {
+            question.images.map((item, index) => {
+              console.log(item)
+              return (
+                <View key={index}>
+                  <Image
+                    style={{ width: 300, height: 300 }}
+                    source={{ uri: item }} />
+                </View>
+              )
+            })
+          }
+        </ScrollView>
+      </View>
       <TextInput
         style={styles.input}
         // editable={userAttempts <= question.totalAttempts ? false : true}
@@ -81,11 +79,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   imageArea: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
     width: '100%',
     height: '200%',
     backgroundColor: 'white',
@@ -105,6 +98,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#7a42f4',
     borderWidth: 1,
-    color:'white'
+    color: 'white'
   },
 })
