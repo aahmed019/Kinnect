@@ -21,12 +21,14 @@ const Lobby = (props) => {
   const [GameCode, setGameCode] = useState('')
   const [playerCounter, setPlayerCounter] = useState(0)
   const [gameCount, setGameCount] = useState(0)
-  const gamesList = useRef(null)
-  const[read, setRead] = useState(false)
-  const[loading, setLoading] = useState(true)
-  const[update, setUpdate] = useState(false)
-  
-  setTimeout(() =>{setLoading(false)},1000)
+  const [gamesList, setGamesList] = useState([])
+  const [read, setRead] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const handleData = (data) => {
+    // ... 
+    setLoading(false)
+  }
+  setTimeout(() => { setLoading(false) }, 1000)
 
 
 
@@ -37,17 +39,9 @@ const Lobby = (props) => {
       var key = data.key
       var value = data.val();
       tempData.push({ key: key, value: value })
-      gamesList.current = tempData
-      setRead(true)
-      setUpdate(false)
-      console.log("--------------------------->"+tempData)
     })
-    
-    Games.getRef(`games/`).on("child_changed", snap =>{
-      setUpdate(true)
-
-    })
-  })
+    setGamesList(tempData)
+  }, [])
 
 
   canUserJoinGame = async (gameID) => {
@@ -123,46 +117,65 @@ const Lobby = (props) => {
   }
   return (
     <ScrollView style={styles.container}>
-
-
-      <Text>{'\n\n\n\n'}</Text>
-      <Button title="Back" onPress={() => props.home(false)} style={styles.backButton} />
+      <Button
+        title="Back"
+        onPress={() => props.home(false)}
+        style={styles.backButton} />
       <Text style={styles.title}>Joining a game</Text>
-
+      {/*
+  Object {
+    "key": "VBEE",
+    "value": Object {
+      "GameCode": "VBEE",
+      "currentPlayer": "",
+      "host": "Noce",
+      "playerCount": 1,
+      "question": 0,
+      "status": "lobby",
+      "timestamp": 1604626561738,
+      "turnStartTimestamp": "",
+      "turnTime": 60000,
+      "waiting": Object {
+        "-MLQBYflWOBVZSFjaqQr": "Noce",
+      },
+    },
+  },
+ */}
       <View>
         {
           read
-          ? joining
-          ?
-          <View>
-          <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white'}}
-          value={playerName}
-          onChangeText={name => setPlayerName(name)}
-          placeholder='Enter your name'
-          >
-          </TextInput>
-          
-          <Button title = 'Join Game' onPress={() => pressSubmit()}></Button>
+            ? joining
+              ?
+              <View>
+                <TextInput
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
+                  value={playerName}
+                  onChangeText={name => setPlayerName(name)}
+                  placeholder='Enter your name'
+                >
+                </TextInput>
 
-          </View>
-            : gamesList.current.map((el, i) =>
-            <View key={gamesList.current[i].key}>
-              <View style={styles.singleGame}>
-              <Text style={styles.text}>{gamesList.current[i].value.host}</Text>
-              <Text style={styles.text}>{gamesList.current[i].value.playerCount}/4</Text>
-              </View>
-  
-              <View style={styles.singleGame}>
-              <Text style={styles.text}>status: {gamesList.current[i].value.status}</Text>
-              <Button title ="Join" onPress ={() => {setJoinCode(gamesList.current[i].key), setJoining(true)}} disabled={gamesList.current[i].value.playerCount >= 4 ? true : false}></Button>
-              </View>
+                <Button title='Join Game' onPress={() => pressSubmit()}></Button>
 
-                  <Text>{'\n\n'}</Text>
+              </View>
+              : gamesList.current.map((item) =>
+                <View key={item.key}>
+                  <View style={styles.singleGame}>
+                    <Text style={styles.text}>{item.value.host}</Text>
+                    <Text style={styles.text}>{item.value.playerCount}/4</Text>
+                  </View>
+
+                  <View style={styles.singleGame}>
+                    <Text style={styles.text}>status: {item.value.status}</Text>
+                    <Button title="Join" onPress={() => { setJoinCode(item.key), setJoining(true) }} disabled={item.value.playerCount >= 4 ? true : false}></Button>
+                  </View>
                 </View>
               )
 
-            : console.log('should not get here')
+            : <View>
+              <Text>Error Retrieving Data</Text>
+              {console.log("--------------BEGIN-------------- \n", gamesList, "\n --------------END--------------- ")}
+            </View>
 
         }
 
