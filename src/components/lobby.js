@@ -24,24 +24,30 @@ const Lobby = (props) => {
   const [gamesList, setGamesList] = useState([])
   const [read, setRead] = useState(false)
   const [loading, setLoading] = useState(true)
-  const handleData = (data) => {
-    // ... 
-    setLoading(false)
+  const snapshotToObject = (snapshot) => {
+    const returnObj = {};
+    snapshot.forEach((childSnapshot) => {
+      var key = childSnapshot.key;
+      var info = childSnapshot.val();
+      returnObj[key] = info;
+    })
+    return returnObj;
   }
-  setTimeout(() => { setLoading(false) }, 1000)
-
-
 
   useEffect(() => {
-    Games = Fire.db
-    var tempData = []
-    Games.getRef("games/").on("child_added", data => {
-      var key = data.key
-      var value = data.val();
-      tempData.push({ key: key, value: value })
-    })
-    setGamesList(tempData)
-  }, [])
+    const fetchData = async () => {
+      Fire.db.getRef("games/").on("child_added", data => {
+        var currentList = gamesList;
+        currentList.push(snapshotToObject(data));
+        setGamesList(currentList);
+        setLoading(false);
+        setRead(true);
+      })
+    }
+    fetchData();
+
+  }, []);
+
 
 
   canUserJoinGame = async (gameID) => {
@@ -122,25 +128,7 @@ const Lobby = (props) => {
         onPress={() => props.home(false)}
         style={styles.backButton} />
       <Text style={styles.title}>Joining a game</Text>
-      {/*
-  Object {
-    "key": "VBEE",
-    "value": Object {
-      "GameCode": "VBEE",
-      "currentPlayer": "",
-      "host": "Noce",
-      "playerCount": 1,
-      "question": 0,
-      "status": "lobby",
-      "timestamp": 1604626561738,
-      "turnStartTimestamp": "",
-      "turnTime": 60000,
-      "waiting": Object {
-        "-MLQBYflWOBVZSFjaqQr": "Noce",
-      },
-    },
-  },
- */}
+
       <View>
         {
           read
@@ -158,16 +146,16 @@ const Lobby = (props) => {
                 <Button title='Join Game' onPress={() => pressSubmit()}></Button>
 
               </View>
-              : gamesList.current.map((item) =>
-                <View key={item.key}>
+              : gamesList.map((item, idx) =>
+                <View key={idx}>
                   <View style={styles.singleGame}>
-                    <Text style={styles.text}>{item.value.host}</Text>
-                    <Text style={styles.text}>{item.value.playerCount}/4</Text>
+                    <Text style={styles.text}>{item.host}</Text>
+                    <Text style={styles.text}>{item.playerCount}/4</Text>
                   </View>
 
                   <View style={styles.singleGame}>
-                    <Text style={styles.text}>status: {item.value.status}</Text>
-                    <Button title="Join" onPress={() => { setJoinCode(item.key), setJoining(true) }} disabled={item.value.playerCount >= 4 ? true : false}></Button>
+                    <Text style={styles.text}>status: {item.status}</Text>
+                    <Button title="Join" onPress={() => { setJoinCode(item.key), setJoining(true) }} disabled={item.playerCount >= 4 ? true : false}></Button>
                   </View>
                 </View>
               )
