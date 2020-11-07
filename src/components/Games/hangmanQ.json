@@ -1,0 +1,47 @@
+[
+{
+  "id": 1,
+  "type": "hangman",
+  "title": "Hangman",
+  "question": "Can you guess what's my favorite color?",
+  "totalAttempts": 6,
+  "words": [
+      "Magenta", 
+      "Red", 
+      "Blue",
+      "Yellow", 
+      "Purple"
+  ]
+},
+
+{
+  "id": 2,
+  "type": "hangman",
+  "title": "Hangman",
+  "question": "What was the murder weapon?",
+  "totalAttempts": 6,
+  "words": [
+      "Gun", 
+      "Knife", 
+      "Wrench",
+      "Saw", 
+      "Axe"
+  ]
+},
+
+{
+  "id": 3,
+  "type": "hangman",
+  "title": "Hangman",
+  "question": "Was state was the murder From?",
+  "totalAttempts": 6,
+  "words": [
+      "New York", 
+      "Kentucky", 
+      "Alabama",
+      "California", 
+      "Texas"
+  ]
+}
+
+]

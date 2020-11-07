@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Home from './Home'
 import { StyleSheet, Text, View, TouchableOpacity , TextInput } from 'react-native';
 
+
 const Contact = (props) => {
   const [back, setBack] = useState(false)
   
