@@ -5,7 +5,6 @@ import { StyleSheet, Text, View, Alert, Button , TouchableOpacity } from 'react-
 // import Button from 'apsl-react-native-button';
 
 const Support = (props) => {
-  const [back, setBack] = useState(false)
   return (
     <View>
       {
@@ -24,6 +23,7 @@ const Support = (props) => {
           : <Home />
       }
     </View>
+
   );
 }
 
