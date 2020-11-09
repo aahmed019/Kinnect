@@ -71,6 +71,7 @@ const Game = (props) => {
         'question': 0,
         'status': 'lobby',
         'playerCount': 1,
+        'ready': 0,
         'GameCode': newGameID,
         'currentPlayer': '',
         'turnStartTimestamp': '',
