@@ -1,6 +1,6 @@
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Alert, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableOpacity, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
@@ -35,8 +35,8 @@ const Lobby = (props) => {
 
   const fetchData = async () => {
     Fire.db.getRef("games/").on("child_added", data => {
-      setGamesList([]);
       var currentList = gamesList;
+      setGamesList([]);
       currentList.push(snapshotToObject(data));
       setGamesList(currentList);
       setLoading(false);
@@ -136,7 +136,6 @@ const Lobby = (props) => {
           joined //After Joinning a Game
             ?
             <View style={styles.container}>
-              <Text>{'\n\n\n'}</Text>
               <GameRoom
                 style={{ alignItems: 'center' }}
                 playerName={playerName}
@@ -148,29 +147,43 @@ const Lobby = (props) => {
             </View>
             :
             <View style={styles.container}>
-              <Text style={styles.title}>
-                {joining ? host : "Lobby"}
-              </Text>
+              <View style={{ marginHorizontal: 30 }}>
+                <Text style={styles.title}>
+                  {joining ? host : "Lobby"}
+                </Text>
+              </View>
               {
                 joining
                   ?
                   <View style={styles.lobby}>
-                    <Text style={styles.title}>
-                      {host}
-                    </Text>
-                    <TextInput
-                      style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
-                      value={playerName}
-                      onChangeText={name => setPlayerName(name)}
-                      placeholder='Enter your name'
+                    <KeyboardAvoidingView
+                      style={styles.descriptionBox}
+                      behavior='padding'
+                      keyboardVerticalOffset={'170'}
                     >
-                    </TextInput>
+                      <View style={styles.scrollView}>
+                        <ScrollView>
+                          <Text style={styles.descriptionText}>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem, vel molestie sapien. Vivamus blandit gravida lorem, id ultrices urna elementum vitae. Nunc rhoncus finibus pellentesque. Quisque eu auctor justo. Proin ultrices, lorem sit amet commodo finibus, turpis odio commodo orci, eu accumsan diam erat a turpis. Maecenas eu feugiat enim, id ultricies velit. Maecenas lobortis velit a cursus auctor. In luctus rhoncus purus eu auctor. Integer aliquam nibh sit amet aliquam suscipit. Vivamus dignissim eros non orci rhoncus, eu ornare urna tincidunt. Nunc et ex gravida, imperdiet odio nec, mollis sem. Donec convallis ullamcorper felis id tempor. Curabitur non ipsum dapibus, tempor elit et, iaculis ex. Pellentesque blandit egestas dui, sed placerat.
+                          </Text>
+                        </ScrollView>
+                      </View>
+
+
+                      <TextInput
+                        style={styles.input}
+                        value={playerName}
+                        onChangeText={name => setPlayerName(name)}
+                        placeholder='Enter your name'
+                      >
+                      </TextInput>
+                    </KeyboardAvoidingView>
 
                     <TouchableOpacity
+                      style={styles.joinGameButton}
                       onPress={() => pressSubmit()}>
-                      <Text>Join Game</Text>
+                      <Text style={{ fontSize: 30, color: 'green' }}>Enter</Text>
                     </TouchableOpacity>
-
                   </View>
                   :
                   <ScrollView>
@@ -188,19 +201,21 @@ const Lobby = (props) => {
                             </Text>
                           </View>
                           {
-                            item.playerCount < 4
+                            item.playerCount < 4 && item.status != 'in-game'
                               ?
                               <TouchableOpacity
                                 style={styles.joinButtonArea}
                                 onPress={() => {
-                                  setJoinCode(item.key),
+                                  setJoinCode(item.GameCode),
                                     setJoining(true),
                                     setHost(item.host)
                                 }}>
                                 <Image style={styles.joinButtonImage} source={require('../images/back.png')} />
                               </TouchableOpacity>
                               :
-                              <Image style={styles.joinButtonImage} source={require('../images/noenter.png')} />
+                              <View style={styles.joinButtonArea}>
+                                <Image style={styles.joinButtonImage} source={require('../images/noenter.png')} />
+                              </View>
                           }
                         </View>
                       )
@@ -217,25 +232,23 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'column',
     height: '100%',
+    paddingTop: '10%',
     backgroundColor: '#2b2d40'
   },
   backButtonArea: {
     position: 'absolute',
-    width: 54,
-    top: 10,
-    start: 10,
+    width: 50,
+    top: '7%',
+    start: 5,
     zIndex: 1,
-    borderColor: 'yellow',
-    borderWidth: 1,
+
   },
   refreshButtonArea: {
     position: 'absolute',
-    width: 54,
-    top: 10,
-    right: 10,
-    zIndex: 1,
-    borderColor: 'yellow',
-    borderWidth: 1,
+    width: 50,
+    top: '7%',
+    right: 5,
+    zIndex: 1
   },
   backButtonImage: {
     width: 50,
@@ -245,9 +258,36 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   lobby: {
-    height: '100%',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  descriptionBox: {
+    maxHeight: '80%',
+    flex: 1,
+    justifyContent: 'flex-start',
     borderColor: 'orange',
     borderWidth: 1
+  },
+  scrollView: {
+    borderColor: 'orange',
+    borderWidth: 1,
+    maxHeight: '80%',
+    margin: '2.5%'
+  },
+  input: {
+    marginLeft: '2.5%',
+    marginRight: '2.5%',
+    marginBottom: 0,
+    height: 40,
+    borderColor: 'orange',
+    borderWidth: 1
+  },
+  joinGameButton: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'green'
   },
   horizonBox: {
     flexDirection: "row",
@@ -287,6 +327,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     transform: [{ rotate: '180deg' }]
+  },
+  descriptionText: {
+    fontSize: 18,
+    color: 'white'
   },
   text: {
     fontSize: 30,
