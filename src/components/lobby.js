@@ -1,6 +1,6 @@
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Alert, Button, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
@@ -22,7 +22,6 @@ const Lobby = (props) => {
   const [playerCounter, setPlayerCounter] = useState(0)
   const [gameCount, setGameCount] = useState(0)
   const [gamesList, setGamesList] = useState([])
-  const [read, setRead] = useState(false)
   const [loading, setLoading] = useState(true)
   const snapshotToObject = (snapshot) => {
     const returnObj = {};
@@ -34,18 +33,18 @@ const Lobby = (props) => {
     return returnObj;
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      Fire.db.getRef("games/").on("child_added", data => {
-        var currentList = gamesList;
-        currentList.push(snapshotToObject(data));
-        setGamesList(currentList);
-        setLoading(false);
-        setRead(true);
-      })
-    }
-    fetchData();
+  const fetchData = async () => {
+    Fire.db.getRef("games/").on("child_added", data => {
+      setGamesList([]);
+      var currentList = gamesList;
+      currentList.push(snapshotToObject(data));
+      setGamesList(currentList);
+      setLoading(false);
+    })
+  }
 
+  useEffect(() => {
+    fetchData();
   }, []);
 
 
@@ -96,123 +95,201 @@ const Lobby = (props) => {
     setPlayerName(name);
     setJoinCode(gameID);
   }
-  //Joining game
-  if (joined) {
-    return (
-      <View style={styles.container}>
-        <Text>{'\n\n\n'}</Text>
-        <GameRoom
-          style={{ alignItems: 'center' }}
-          playerName={playerName}
-          playerid={playerID}
-          setPlayerID={setPlayerID}
-          gameID={joinCode}
-          home={props.home}
-        />
-      </View>
-    )
-  }
-  //Loading page
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>{'\n\n\n'}</Text>
-        <Text style={styles.title}>Loading ...</Text>
-      </View>
-    )
-  }
   return (
-    <ScrollView style={styles.container}>
-      <Button
-        title="Back"
-        onPress={() => props.home(false)}
-        style={styles.backButton} />
-      <Text style={styles.title}>Joining a game</Text>
-
-      <View>
-        {
-          read
-            ? joining
-              ?
-              <View>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
-                  value={playerName}
-                  onChangeText={name => setPlayerName(name)}
-                  placeholder='Enter your name'
-                >
-                </TextInput>
-
-                <Button title='Join Game' onPress={() => pressSubmit()}></Button>
-
-              </View>
-              : gamesList.map((item, idx) =>
-                <View key={idx}>
-                  <View style={styles.singleGame}>
-                    <Text style={styles.text}>{item.host}</Text>
-                    <Text style={styles.text}>{item.playerCount}/4</Text>
-                  </View>
-
-                  <View style={styles.singleGame}>
-                    <Text style={styles.text}>status: {item.status}</Text>
-                    <Button title="Join" onPress={() => { setJoinCode(item.key), setJoining(true) }} disabled={item.playerCount >= 4 ? true : false}></Button>
-                  </View>
-                </View>
-              )
-
-            : <View>
-              <Text>Error Retrieving Data</Text>
-              {console.log("--------------BEGIN-------------- \n", gamesList, "\n --------------END--------------- ")}
+    //Main Container
+    <View style={styles.mainContainer}>
+      {/* BACK BUTTON */}
+      {
+        joining
+          ?
+          <TouchableOpacity
+            onPress={() => {
+              setJoinCode(''),
+                setJoining(false),
+                setHost('')
+            }}
+            style={styles.backButtonArea}>
+            <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+          </TouchableOpacity>
+          :
+          <TouchableOpacity
+            onPress={() => props.home(false)}
+            style={styles.backButtonArea}>
+            <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+          </TouchableOpacity>
+      }
+      {/* REFRESH BUTTON */}
+      <TouchableOpacity
+        onPress={() => fetchData()}
+        style={styles.refreshButtonArea}>
+        <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
+      </TouchableOpacity>
+      {/* MAIN PAGE */}
+      {
+        // Loading Page to load data from backend
+        loading
+          ?
+          <View style={styles.container}>
+            <Text style={styles.title}>Loading ...</Text>
+          </View>
+          :
+          joined //After Joinning a Game
+            ?
+            <View style={styles.container}>
+              <Text>{'\n\n\n'}</Text>
+              <GameRoom
+                style={{ alignItems: 'center' }}
+                playerName={playerName}
+                playerid={playerID}
+                setPlayerID={setPlayerID}
+                gameID={joinCode}
+                home={props.home}
+              />
             </View>
+            :
+            <View style={styles.container}>
+              <Text style={styles.title}>
+                {joining ? host : "Lobby"}
+              </Text>
+              {
+                joining
+                  ?
+                  <View style={styles.lobby}>
+                    <Text style={styles.title}>
+                      {host}
+                    </Text>
+                    <TextInput
+                      style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
+                      value={playerName}
+                      onChangeText={name => setPlayerName(name)}
+                      placeholder='Enter your name'
+                    >
+                    </TextInput>
 
-        }
+                    <TouchableOpacity
+                      onPress={() => pressSubmit()}>
+                      <Text>Join Game</Text>
+                    </TouchableOpacity>
 
-      </View>
-    </ScrollView>
+                  </View>
+                  :
+                  <ScrollView>
+                    {
+                      gamesList.map((item, idx) =>
+                        <View key={idx} style={styles.singleGame}>
+                          {console.log("----------------------GAME INFO----------------------", item)}
+                          <Text style={styles.roomName}>
+                            {item.host}
+                          </Text>
+                          <View style={styles.horizonBox}>
+                            <Image style={{ width: 30, height: 30 }} source={require('../images/human.png')} />
+                            <Text style={styles.text}>
+                              {item.playerCount}/4
+                            </Text>
+                          </View>
+                          {
+                            item.playerCount < 4
+                              ?
+                              <TouchableOpacity
+                                style={styles.joinButtonArea}
+                                onPress={() => {
+                                  setJoinCode(item.key),
+                                    setJoining(true),
+                                    setHost(item.host)
+                                }}>
+                                <Image style={styles.joinButtonImage} source={require('../images/back.png')} />
+                              </TouchableOpacity>
+                              :
+                              <Image style={styles.joinButtonImage} source={require('../images/noenter.png')} />
+                          }
+                        </View>
+                      )
+                    }
+                  </ScrollView>
+              }
 
-  );
+            </View>
+      }
+    </View>
+  )
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderColor: 'orange',
-    borderWidth: 2,
+  mainContainer: {
+    flexDirection: 'column',
+    height: '100%',
     backgroundColor: '#2b2d40'
+  },
+  backButtonArea: {
+    position: 'absolute',
+    width: 54,
+    top: 10,
+    start: 10,
+    zIndex: 1,
+    borderColor: 'yellow',
+    borderWidth: 1,
+  },
+  refreshButtonArea: {
+    position: 'absolute',
+    width: 54,
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    borderColor: 'yellow',
+    borderWidth: 1,
+  },
+  backButtonImage: {
+    width: 50,
+    height: 50
+  },
+  container: {
+    height: '100%'
   },
   lobby: {
-    flex: 1,
+    height: '100%',
     borderColor: 'orange',
-    borderWidth: 2,
-    backgroundColor: '#2b2d40'
+    borderWidth: 1
+  },
+  horizonBox: {
+    flexDirection: "row",
+    width: '25%',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   singleGame: {
-    flex: 1,
     flexDirection: "row",
-    paddingBottom: '5%',
-    borderColor: 'yellow',
-    borderWidth: 2,
+    width: '100%',
+    height: 100,
+    paddingLeft: '2%',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
+    borderColor: 'green',
+    borderWidth: 1,
     backgroundColor: '#2b2d40'
   },
   title: {
-    fontSize: 50,
+    fontSize: 30,
     textAlign: "center",
     backgroundColor: '#2b2d40',
     color: 'white',
     paddingBottom: '10%',
   },
-  backButton: {
-    fontSize: 20,
-    paddingBottom: '10%',
-    justifyContent: 'flex-start',
-    backgroundColor: '#2b2d40',
+  roomName: {
+    width: '40%',
+    fontSize: 30,
     color: 'white'
   },
+  joinButtonArea: {
+    width: 50
+  },
+  joinButtonImage: {
+    width: 40,
+    height: 40,
+    transform: [{ rotate: '180deg' }]
+  },
   text: {
-    fontSize: 20,
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#2b2d40',
-    textAlign: 'center',
+    fontSize: 30,
     color: 'white'
   }
 })
