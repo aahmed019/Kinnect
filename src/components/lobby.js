@@ -34,9 +34,22 @@ const Lobby = (props) => {
   }
 
   const fetchData = async () => {
-    Fire.db.getRef("games/").on("child_added", data => {
-      var currentList = gamesList;
+    Fire.db.getRef("games/").on("value", data => {
+      var currentList = [];
       setGamesList([]);
+      data.forEach((childSnapshot) => {
+        currentList.push(childSnapshot.val());
+      })
+      setGamesList(currentList);
+      setLoading(false);
+    })
+  }
+
+  const listenForData = async () => {
+    fetchData();
+    Fire.db.getRef("games/").on("child_added", data => {
+      console.log("child_added called")
+      var currentList = gamesList;
       currentList.push(snapshotToObject(data));
       setGamesList(currentList);
       setLoading(false);
@@ -44,7 +57,7 @@ const Lobby = (props) => {
   }
 
   useEffect(() => {
-    fetchData();
+    listenForData();
   }, []);
 
 
@@ -190,7 +203,7 @@ const Lobby = (props) => {
                     {
                       gamesList.map((item, idx) =>
                         <View key={idx} style={styles.singleGame}>
-                          {console.log("----------------------GAME INFO----------------------", item)}
+                          {/* {console.log("----------------------GAME INFO----------------------", item)} */}
                           <Text style={styles.roomName}>
                             {item.host}
                           </Text>
