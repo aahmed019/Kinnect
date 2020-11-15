@@ -9,18 +9,12 @@ import * as firebase from 'firebase'
 
 const Lobby = (props) => {
   let Games = Fire.db
-  const [startGame, setStartGame] = useState(false)
-  const [inGame, setInGame] = useState(false)
   const [playerName, setPlayerName] = useState('')
   const [playerID, setPlayerID] = useState('')
   const [joinCode, setJoinCode] = useState('')
   const [joined, setJoined] = useState(false)
   const [joining, setJoining] = useState(false)
   const [host, setHost] = useState('')
-  const [status, setStatus] = useState('')
-  const [GameCode, setGameCode] = useState('')
-  const [playerCounter, setPlayerCounter] = useState(0)
-  const [gameCount, setGameCount] = useState(0)
   const [gamesList, setGamesList] = useState([])
   const [loading, setLoading] = useState(true)
   const snapshotToObject = (snapshot) => {
@@ -104,7 +98,8 @@ const Lobby = (props) => {
   }
   function finalizeJoin(name, gameID) {
     Games.getRef('games/' + gameID + '/playerCount').set(firebase.database.ServerValue.increment(1))
-    Games.getRef('players/' + gameID).push(name)
+    //Games.getRef('players/' + gameID).push(name)
+    Games.getRef(`games/${gameID}/players/`).push(name)
     setPlayerName(name);
     setJoinCode(gameID);
   }

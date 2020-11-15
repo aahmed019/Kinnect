@@ -5,6 +5,7 @@ import Fire from '../../firebaseConfig';
 import GameRoom from './gameRoom';
 //for creating games
 const Game = (props) => {
+  console.log(process.env.REACT_APP_FIREBASE_API_KEY + ' <============API')
   //fix errors with useEffect( games = fire.db)
   useEffect(() =>{
     Games = Fire.db
@@ -79,7 +80,7 @@ const Game = (props) => {
       })
       console.log(`Game created. ID: ${newGameID}`);
       // Add host to game
-      let ref = await Games.getRef(`players/${newGameID}`).push(name.trim())
+      let ref = await Games.getRef(`games/${newGameID}/players/`).push(name.trim())
       setPlayerID(ref.key)
       // Add player to 'waiting' state to indicate (to others) they haven't submitted words
       Games.getRef(`games/${newGameID}/waiting/${ref.key}`).set(name.trim());
@@ -118,7 +119,7 @@ const Game = (props) => {
         })
         validGameIDs.forEach(validID => {
           Games.getRef(`games/${validID}`).remove();
-          Games.getRef(`players/${validID}`).remove();
+          //Games.getRef(`games/players/${validID}`).remove();
         })
       }
     }

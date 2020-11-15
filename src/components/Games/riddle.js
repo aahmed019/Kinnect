@@ -25,7 +25,6 @@ import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, TextInput} fr
       props.rightAnswer()
     }
     if(Winner){
-      alert("You Win")
       props.rightAnswer()
     }
 
