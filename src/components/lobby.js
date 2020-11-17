@@ -48,7 +48,7 @@ const Lobby = (props) => {
   const listenForData = async () => {
     fetchData();
     Fire.db.getRef("games/").on("child_added", data => {
-      console.log("child_added called")
+      // console.log("child_added called")
       var currentList = gamesList;
       currentList.push(snapshotToObject(data));
       setGamesList(currentList);
@@ -87,7 +87,6 @@ const Lobby = (props) => {
       return true;
 
     } catch {
-      //console.error(error);
       console.log(`Could not check if game ${gameID} exists`);
       return false;
     }
@@ -102,9 +101,10 @@ const Lobby = (props) => {
       finalizeJoin(playerName.trim(), gameID)
     }
   }
-  function finalizeJoin(name, gameID) {
+  finalizeJoin = (name, gameID) => {
     Games.getRef('games/' + gameID + '/playerCount').set(firebase.database.ServerValue.increment(1))
-    Games.getRef('players/' + gameID).push(name)
+    Games.getRef('games/' + gameID + '/currentPlayer').push({ "playerName": name })
+    Games.getRef('players/' + gameID).push({ "playerName": name })
     setPlayerName(name);
     setJoinCode(gameID);
   }
@@ -203,7 +203,7 @@ const Lobby = (props) => {
                     {
                       gamesList.map((item, idx) =>
                         <View key={idx} style={styles.singleGame}>
-                          {/* {console.log("----------------------GAME INFO----------------------", item)} */}
+                          {console.log("----------------------GAME INFO----------------------", item)}
                           <Text style={styles.roomName}>
                             {item.host}
                           </Text>
