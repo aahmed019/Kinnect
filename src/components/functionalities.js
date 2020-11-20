@@ -12,15 +12,15 @@ import Fire from '../../firebaseConfig';
 // name: ...
 // trials :: number of questions
 // trials collection
-// in each game will have "trials collection" of question
+// in each game will have "trials collection" of challenge
 // in "trials" collection will have list of challenges
 // -------------------------
 // CHALLENGE FORMAT
-// question: description
+// challenge: description
 // answer: answer of the challenge
 // attempt: number of attempts
 // hint: hint
-// type: question type
+// type: challenge type
 // data: list of data required for this type
 const Functionalities = (props) => {
   // const [back, setBack] = useState(false)
@@ -41,8 +41,9 @@ const Functionalities = (props) => {
   // GENERATE CHALLENGE FORMAT for "numberOfQuestion" times
   // after each time will push into current "questionList"
   const [editQuestionPage, setEditQuestionPage] = useState(false);
-  const [question, setQuestion] = useState({});
-  const [questionsList, setQuestionsList] = useState([]);
+  const [challenge, setChallenge] = useState({});
+  const [challengesList, setChallengesList] = useState([]);
+  const [confirmed, setConfirmed] = useState(false);
   // submit button will push everything into the database
   //-------------------------READ AND CREATE GAME COMPONENTS-------------------------
   const [data, setData] = useState([]);
@@ -82,12 +83,17 @@ const Functionalities = (props) => {
     var tempObject = gameData;
     tempObject[key] = value;
     setGameData(tempObject);
-    console.log(tempObject);
   }
-  const addNewKeyValueQuestionData = (key, value) => {
-    var tempQuestion = question;
+  const addNewKeyValueChallengeData = (key, value) => {
+    var tempQuestion = challenge;
     tempQuestion[key] = value;
-    setQuestion(tempQuestion);
+    setChallenge(tempQuestion);
+  }
+  const addChallengeToChallengesList = (data) => {
+    var tempList = challengesList
+    tempList.push(data)
+    setChallengesList(tempList)
+    setChallenge({})
   }
   //-------------------------READ AND CREATE GAME COMPONENTS-------------------------
 
@@ -141,7 +147,8 @@ const Functionalities = (props) => {
                           <View style={styles.inner}>
                             <Text style={styles.header}>GAME'S INFO</Text>
                             <View style={styles.inputBox}>
-                              <TextInput placeholder="Name of The Game"
+                              <TextInput
+                                placeholder="Name of The Game"
                                 multiline={true}
                                 style={styles.textInput}
                                 onChangeText={value => {
@@ -149,7 +156,8 @@ const Functionalities = (props) => {
                                 }} />
                             </View>
                             <View style={styles.inputBox}>
-                              <TextInput placeholder="Game's Description"
+                              <TextInput
+                                placeholder="Game's Description"
                                 multiline={true}
                                 style={styles.textInput}
                                 onChangeText={(value) => {
@@ -158,7 +166,8 @@ const Functionalities = (props) => {
 
                             </View>
                             <View style={styles.inputBox}>
-                              <TextInput placeholder="Number of Players"
+                              <TextInput
+                                placeholder="Number of Players"
                                 multiline={true}
                                 keyboardType={'numeric'}
                                 style={styles.textInput}
@@ -167,7 +176,8 @@ const Functionalities = (props) => {
                                 }} />
                             </View>
                             <View style={styles.inputBox}>
-                              <TextInput placeholder="Number of Questions"
+                              <TextInput
+                                placeholder="Number of Questions"
                                 multiline={true}
                                 keyboardType={'numeric'}
                                 style={styles.textInput}
@@ -183,8 +193,8 @@ const Functionalities = (props) => {
 
                             <View style={styles.btnContainer}>
                               <Button title="Next" onPress={() => {
-                                addData(),
-                                  setEditQuestionPage(true)
+                                // addData(),
+                                setEditQuestionPage(true)
                               }
                               } />
                             </View>
@@ -192,65 +202,110 @@ const Functionalities = (props) => {
                         </TouchableWithoutFeedback>
                       </KeyboardAvoidingView>
                       :
-                      // --------------------QUESTION'S DATA SECTION--------------------
-                      <KeyboardAvoidingView
-                        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-                        style={{ flex: 1 }}
-                        key="user-input-section">
-                        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                          <View style={styles.inner}>
-                            <Text style={styles.header}>QUESTION'S INFO</Text>
-                            <View style={styles.inputBox}>
-                              <TextInput placeholder="Question"
-                                multiline={true}
-                                style={styles.textInput}
-                                onChangeText={value => {
-                                  addNewKeyValueGameData("name", value)
-                                }} />
+                      // --------------------challenge'S DATA SECTION--------------------
+                      numberOfQuestions > 0
+                        ? // number of questions need to be filled before sending to the DB 
+                        <KeyboardAvoidingView
+                          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+                          style={{ flex: 1 }}
+                          key="user-input-section-for-challenge">
+                          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                            <View style={styles.inner}>
+                              <Text style={styles.header}>CHALLENGE {numberOfQuestions}</Text>
+                              <View style={styles.inputBox}>
+                                <TextInput
+                                  placeholder="Question"
+                                  multiline={true}
+                                  style={styles.textInput}
+                                  onChangeText={value => {
+                                    addNewKeyValueChallengeData("question", value)
+                                  }} />
+                              </View>
+                              <View style={styles.inputBox}>
+                                <TextInput
+                                  placeholder="Answer"
+                                  multiline={true}
+                                  style={styles.textInput}
+                                  onChangeText={(value) => {
+                                    addNewKeyValueChallengeData("answer", value)
+                                  }} />
+                              </View>
+                              <View style={styles.inputBox}>
+                                <TextInput
+                                  placeholder="Type"
+                                  style={styles.textInput}
+                                  onChangeText={(value) => {
+                                    addNewKeyValueChallengeData("type", value)
+                                  }} />
+                              </View>
+                              <View style={styles.inputBox}>
+                                <TextInput
+                                  placeholder="Attempts"
+                                  keyboardType={'numeric'}
+                                  style={styles.textInput}
+                                  onChangeText={(value) => {
+                                    addNewKeyValueChallengeData("attempts", value)
+                                  }} />
+                              </View>
+                              <View style={styles.inputBox}>
+                                <TextInput
+                                  placeholder="Hint"
+                                  multiline={true}
+                                  style={styles.textInput}
+                                  onChangeText={(value) => {
+                                    addNewKeyValueChallengeData("hint", value)
+                                  }} />
+                              </View>
+                              <View style={styles.btnContainer}>
+                                <Button
+                                  title="Next"
+                                  onPress={() => {
+                                    var tempAt = numberOfQuestions
+                                    setNumberOfQuestions(tempAt - 1)
+                                    addChallengeToChallengesList(challenge)
+                                    console.log(challengesList)
+                                  }} />
+                                <Button title="BACK" onPress={() => setEditQuestionPage(false)} />
+                              </View>
                             </View>
-                            <View style={styles.inputBox}>
-                              <TextInput placeholder="Answer"
-                                multiline={true}
-                                style={styles.textInput}
-                                onChangeText={(value) => {
-                                  addNewKeyValueGameData("description", value)
-                                }} />
+                          </TouchableWithoutFeedback>
 
-                            </View>
-                            <View style={styles.inputBox}>
-                              <TextInput placeholder="Attempts"
-                                keyboardType={'numeric'}
-                                style={styles.textInput}
-                                onChangeText={(value) => {
-                                  addNewKeyValueGameData("numOfPlayers", value)
-                                }} />
-                            </View>
-                            <View style={styles.inputBox}>
-                              <TextInput placeholder="Hint"
-                                multiline={true}
-                                style={styles.textInput}
-                                onChangeText={(value) => {
-                                  addNewKeyValueGameData("numOfQuestions", value),
-                                    setNumberOfQuestions(value)
-                                }} />
-                            </View>
-                            <View>
-                              <Text>{gameData.name}</Text>
-                              <Text>{gameData.description}</Text>
-                            </View>
 
-                            <View style={styles.btnContainer}>
-                              <Button title="Next" onPress={() => null} />
+                        </KeyboardAvoidingView>
+                        : // if numberOfQuestion == 0 => review everything before push to DB
+                        <View>
+                          <Text>Review Section</Text>
+                          {
+                            !confirmed
+                              ?
+                              <View>
+                                <Text>Challenges not added to the list yet</Text>
+                                <Button title="Combine" onPress={() => {
+                                  addNewKeyValueGameData("challegnes", challengesList),
+                                    setConfirmed(true)
+                                }} />
+                              </View>
+                              :
+                              <View>
+                                <Text> Challenges Added</Text>
+                                <Button title="Press to Submit"
+                                  onPress={() => {
+                                    addData()
+                                  }} />
+                              </View>
+                          }
 
-                            </View>
-                          </View>
-                        </TouchableWithoutFeedback>
-                        <Button title="BACK" onPress={() => setEditQuestionPage(false)} />
-                      </KeyboardAvoidingView>
+
+                        </View>
                   }
-
-
-                  <Button title="Back To Games Page" onPress={() => { setNewGame(false) }} />
+                  <Button
+                    title="Back To Games Page"
+                    onPress={() => {
+                      setNewGame(false),
+                        setGameData({}),
+                        setChallenge({}),
+                        setChallengesList([])
+                    }} />
                 </View>
 
                 :  // else successfully retrieve data from FireStore
@@ -356,14 +411,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   header: {
-    fontSize: 36,
+    fontSize: 30,
     marginBottom: 48,
   },
   textInput: {
-    height: 50,
+    minHeight: 20,
+    height: 30,
     width: '80%',
     borderColor: '#000000',
     borderBottomWidth: 1,
+    marginTop: 20,
     marginBottom: 20,
   },
   btnContainer: {
