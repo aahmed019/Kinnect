@@ -9,7 +9,6 @@ import Fire from '../../firebaseConfig';
 
 export default function GameRoom(props) {
   // this room will receive data from backend, then generate question type base on the data receive
-  const [exit, setExit] = useState(false) //option to leave the game
   const [insideAQuestion, setInsideAQuestion] = useState(false) // check if the player inside the game or not (or if they are ready). If they are not inside the game, check if they won or lost =>  4 states: "inProgress", "Win", "Lose", false
   const [gameOver, setGameOver] = useState(false) // used to keep track when the game is over
   const [winner, setWinner] = useState(false) // answered correctly all the question
@@ -21,68 +20,22 @@ export default function GameRoom(props) {
   const [questionType, setQuestionType] = useState('')
   const [ready, setReady] = useState(0)
   const [readied, setReadied] = useState(false)
-  const [hostName, setHostname] = useState(props.hostname)
-  const [hostid, setHostid] = useState(props.hostid)
-  const [player, setPlayer] = useState(props.playerid)
   const [roomCode] = useState(props.gameID.toUpperCase())
-  const [gameStatus, setGameStatus] = useState('lobby')
   const [Timer, setTimer] = useState(3)
 
-
-
-  const addPlayer = () => {
-    Games.getRef(`games/${props.gameID}/ready`).set(firebase.database.ServerValue.increment(1))
-    setReadied(true)
-  }
-
-  const removePlayer = () => {
-    Games.getRef(`games/${props.gameID}/ready`).set(firebase.database.ServerValue.increment(-1))
-    setReadied(true)
-  }
-
-  // const deletePlayers = () => {
-  //   Fire.db.getRef(`players/${props.gameID}`).remove()
-  //     .then(() => {
-  //       console.log(`Players from (${props.gameID}) were deleted`);
-  //     })
-  //     .catch((error) => 'Player deletion failed: ' + error.message);
-
-  //   props.home(false)
-  // }
-
-  const exitGame = () => {
-    Games.getRef(`games/${props.gameID}`).remove()
-      .then(() => {
-        console.log(`Game (${props.gameID}) was deleted`);
-      })
-      .catch((error) => 'Game deletion failed: ' + error.message);
-    props.home(false)
-  }
-
-  //updates the next round
-  const nextRound = () => {
-    if (nthQuestion === 3) {
-      alert('you won!')
-    } else {
-      Fire.db.getRef(`games/${props.gameID}/question`).set(nthQuestion + 1);
-      setNthQuestion(nthQuestion + 1)
-    }
-  }
-
+  //similar to componentDidMount & unMount
   useEffect(() => {
     Games = Fire.db
-    //Listens to ready changes
-    Games.getRef(`games/${props.gameID}/ready`).on('value', (snapshot) => {
-      let readyState = snapshot.val()
-      setReady(readyState)
-    });
-    //Listens to round changes
-    Games.getRef(`games/${props.gameID}/question`).on('value', (snapshot) => {
-      let questState = snapshot.val();
-      console.log(questState)
-      setNthQuestion(questState);
-      setQuestionData(sampleGames[questState])
-    });
+    //updates the next round
+    nextRound = () => {
+      if (nthQuestion === 3) {
+        setWinner(true)
+      } else {
+        Games.getRef(`games/${props.gameID}/question`).set(nthQuestion + 1);
+        setNthQuestion(nthQuestion + 1)
+      }
+    }
+
   })
 
 
@@ -126,7 +79,12 @@ export default function GameRoom(props) {
     setNthQuestion(0)
     alert('Sorry You Lost!')
   }
+  const addPlayer = () => {
+    Games.getRef(`games/${props.gameID}/ready`).set(firebase.database.ServerValue.increment(1))
+    setReadied(true)
 
+
+  }
   // tempGetQuestion is for prototype and to read data from JSON file not from backend
   const tempGetQuestion = () => {
     Fire.db.getRef(`games/${props.gameID}/status`).set('in-game');
@@ -158,25 +116,33 @@ export default function GameRoom(props) {
       )
   }
 
+  const exitGame = () => {
 
+
+    Games.getRef(`games/${props.gameID}`).remove()
+      .then(() => {
+        console.log(`Game (${props.gameID}) was deleted`);
+      })
+      .catch((error) => 'Game deletion failed: ' + error.message);
+    props.home(false)
+  }
 
   // -------------------END OF HELPER FUNCTIONS-------------------
   // -------------------RENDERING CASES---------------------------
   // Is it inside a question?
   // True => What type
   // False => Because of room just created or the game ended ?
-  // Loading page
+  //Loading page 
+  //if(ready === 4){
+  //if(Timer !== 0){
+  //setInterval(() => {
+  //setTimer(Timer <= Timer - 1);
+  //if (Timer <= 0) {setNewTest(true)};
+  //}, 1000);
+  //tempGetQuestion();
+  // }
 
-  if (ready == 4 && Timer) {
-    let interval = null;
-    interval = setInterval(() => {
-      setTimer(Timer => Timer - 1);
-    }, 1000);
-    if (Timer <= 0) {
-      setTimer(false)
-      tempGetQuestion()
-    }
-  }
+
 
 
   return (
@@ -187,9 +153,22 @@ export default function GameRoom(props) {
         ? winner
           ? // WINNING PAGE
           <View>
-            <Text style={styles.text}>Congratulations!</Text>
-
-            <Text onPress={() => exitGame()} style={styles.Text}>Back</Text>
+            <Button onPress={() => { addPlayer() }} style={styles.text} disabled={readied} title='press'>Press here when ready!</Button>
+            <Text style={styles.text}>{ready}/4</Text>
+            <Text style={styles.text} onPress={() => {
+              tempGetQuestion()
+              //if(ready === 4){
+              //setTimeout(() => {
+              //setTimer(Timer <= Timer - 1); 
+              //if(Timer == 0){
+              //tempGetQuestion()
+              //}
+              //}, 1000);
+              //}
+            }}>Play!</Text>
+            <Text style={styles.text}>{Timer}</Text>
+            <Text>{'\n\n\n\n'} </Text>
+            <Text style={styles.text} onPress={() => { tempGetQuestion() }}>DEV</Text>
           </View>
           : gameOver// LOSING PAGE
             ?
