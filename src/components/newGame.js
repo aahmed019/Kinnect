@@ -5,7 +5,6 @@ import Fire from '../../firebaseConfig';
 import GameRoom from './gameRoom';
 //for creating games
 const Game = (props) => {
-  console.log(process.env.REACT_APP_FIREBASE_API_KEY + ' <============API')
   //fix errors with useEffect( games = fire.db)
   useEffect(() =>{
     Games = Fire.db
