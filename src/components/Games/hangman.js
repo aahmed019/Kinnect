@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 
 
 import img0 from "../../images/hangman0.jpg"
@@ -37,7 +37,13 @@ const Hangman = (props) => {
     
     function generateKeyboard(){
         return "abcdefghijklmnopqrstuvwxyz".split("").map(letter => (
-            <Button 
+          <TouchableOpacity style = {{
+          elevation: 8,
+         
+          borderRadius: 10,
+          
+          paddingHorizontal: 12
+          }}
             style={{fontSize: 20, color: 'green'}}
             styleDisabled={{color: 'red'}} title={letter}
             key={letter}
@@ -51,8 +57,16 @@ const Hangman = (props) => {
             disabled={Guessed.has(letter)}
             >
                 
-               {letter}
-            </Button>
+               <Text style ={{
+                 fontSize: 18,
+                 color: "#fff",
+                 paddingVertical: 6,
+                 paddingHorizontal: 12,
+                 fontWeight: "bold",
+                 alignSelf: "center",
+                 textTransform: "uppercase"
+               }}>{letter}</Text>
+          </TouchableOpacity>
         ))
     }
     
@@ -72,24 +86,22 @@ const Hangman = (props) => {
     }
 
   return (
-    <ScrollView style={{ backgroundColor: '#2b2d40' }}>
-      <Text onPress={() => props.home(false)} style={styles.Text}>Back</Text>
-      <Text style={styles.Text}>{question.title}:</Text>
+    <View style={{ backgroundColor: '#2b2d40' }}>
+  <Text style={styles.Text}>{question.title}:</Text>
   <Text style={styles.Text}>{question.question}</Text>
   <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.totalAttempts}</Text>
   <Text>{'\n'}</Text>
   
   <Image style={styles.Images} source={defaults.images[mistake]}></Image>
-
-  
   <Text style={styles.Text}>
       {!GameOver ? Guess() : answer}
   </Text>
+  <Text>{'\n'}</Text>
   <View style={styles.Keyboard}>{gameKeys}</View>
-  <Text style={styles.Title}>{answer}{'\n\n'}</Text>
+  {console.log(answer)}
   
      
-    </ScrollView>
+    </View>
   );
 }
 
@@ -102,7 +114,7 @@ const styles = StyleSheet.create({
       
     },
     Text: {
-      fontSize: 30,
+      fontSize: 20,
       paddingTop: '10%',
       backgroundColor: '#2b2d40',
       color: 'white',
@@ -122,9 +134,8 @@ const styles = StyleSheet.create({
       color: 'white'
     },
     Keyboard:{
-        flex:1,
-        flexDirection: "row",
         flexWrap: "wrap",
+        flexDirection:'row',
         justifyContent:'center'
     }
   })

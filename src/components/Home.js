@@ -17,6 +17,8 @@ import { Audio } from 'expo-av';
 import Hangman from './Games/hangman';
 import Riddle from './Games/riddle'
 import Fire from '../../firebaseConfig';
+import DragNDrop from './Games/DragAndDrop';
+
 
 
 export default function App() {
@@ -44,7 +46,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<Game
+    return (<DragNDrop
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {
