@@ -281,7 +281,7 @@ const Functionalities = (props) => {
                               <View>
                                 <Text>Challenges not added to the list yet</Text>
                                 <Button title="Combine" onPress={() => {
-                                  addNewKeyValueGameData("challegnes", challengesList),
+                                  addNewKeyValueGameData("challenges", challengesList),
                                     setConfirmed(true)
                                 }} />
                               </View>

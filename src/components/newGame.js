@@ -6,6 +6,7 @@ import GameRoom from './gameRoom';
 //for creating games
 const Game = (props) => {
   //fix errors with useEffect( games = fire.db)
+  Games = Fire.db
   useEffect(() => {
     fetchData()
   }, [])
@@ -41,8 +42,6 @@ const Game = (props) => {
       tempObject["DOC_DATA"] = doc.data();
       returnArray.push(tempObject);
     })
-    console.log('TYPE OF RETURNARRAY', typeof (returnArray))
-    console.log(returnArray)
     return returnArray;
   }
   // FETCH DATA
@@ -76,16 +75,18 @@ const Game = (props) => {
       return true;
     }
     try {
-      let snapshot = await Games.getRef(`games`).orderByKey().equalTo(id).once('value');
-      if (snapshot.val() == null) { // We want to make sure the game doesn't exist yet
-        console.log(`Game ID (${id}) is valid`)
-        return false;
-      } else {
-        console.log(`Game id (${id}) is not valid`);
-        return true;
-      }
-    } catch {
-      console.log(`Failed to check if game id ${id} is valid`);
+      let snapshot = await Games.getRef(`games`).orderByKey().equalTo(id).once('value').then(snapshot => {
+        if (snapshot.val() == null) { // We want to make sure the game doesn't exist yet
+          console.log(`Game ID (${id}) is valid`)
+          return false;
+        } else {
+          console.log(`Game id (${id}) is not valid`);
+          return true;
+        }
+      }).catch(error => { console.log("error", error) });
+
+    } catch (err) {
+      console.log(`Failed to check if game id ${id} is valid ${err}`);
       return true;
     }
   }
@@ -112,12 +113,14 @@ const Game = (props) => {
         'ready': 0,
         'GameCode': newGameID,
         'host': name,
-        'currentPlayer': [{ name: 0 }], //0 == NOT ready, 1 == ready
+        'currentPlayers': [name],
+        'readyPlayers': [], //0 == NOT ready, 1 == ready
         'turnStartTimestamp': '',
         'turnTime': 60000,
         'challenges': gameInfo.challenges
       }
-      await gameRef.child(newGameID).set(tempObject)
+      console.log(tempObject)
+      await gameRef.child(newGameID).set(tempObject).then(res => { alert("Game Added Successfully") }).catch(error => { console.log("Error in creating new room", error) })
       console.log(`Game created. ID: ${newGameID}`);
       // Add host to game
       // let ref = await Games.getRef(`games/${newGameID}/players/`).push(name.trim())
@@ -238,7 +241,8 @@ const Game = (props) => {
                   ?
                   <View>
                     <Text>Room Information: {JSON.stringify(gameInfo, null, 2)}</Text>
-                    <Button title='Create Game' onPress={() => test() ? setCreated(true) : console.log('did not work')}></Button>
+                    <Button title='Create Game' onPress={() => test() ? setCreated(true) : console.log('did not work')} />
+
                   </View>
                   : null
             }
