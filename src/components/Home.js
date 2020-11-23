@@ -46,7 +46,7 @@ export default function App() {
     }
   }
   if (newRoomPage) {
-    return (<DragNDrop
+    return (<Game
       style={{ alignItems: 'center' }}
       home={setNewRoom} />)
   } else if (joinRoomPage) {
@@ -69,7 +69,7 @@ export default function App() {
       home={setTestingPage} />)
   }
   else {
-   
+
     return (
       <View style={styles.container}>
 
