@@ -13,6 +13,7 @@ const Game = (props) => {
 
   // NEW GAME DATA
   const [name, setName] = useState('')
+  const [roomName, setRoomName] = useState('')
   const [gameInfo, setGameInfo] = useState({})
   const [playerID, setPlayerID] = useState('')
   const [created, setCreated] = useState(false)
@@ -102,9 +103,12 @@ const Game = (props) => {
     try {
       //create new game table for each game
       let gameRef = Games.getRef('games');
+      let tempCurrentPlayers = [name];
       let tempObject = {
         'timestamp': Date.now(),
-        'name': gameInfo.name,
+        'name': roomName,
+        'theme': gameInfo.name,
+        'description': gameInfo.description,
         'atQuestion': 0,
         'totalQuestion': gameInfo.numOfQuestions,
         'capacity': gameInfo.numOfPlayers,
@@ -113,7 +117,7 @@ const Game = (props) => {
         'ready': 0,
         'GameCode': newGameID,
         'host': name,
-        'currentPlayers': [name],
+        'currentPlayers': name,
         'readyPlayers': [], //0 == NOT ready, 1 == ready
         'turnStartTimestamp': '',
         'turnTime': 60000,
@@ -201,6 +205,13 @@ const Game = (props) => {
             {page == 0
               ?
               <View>
+                <Text style={styles.gameTitle}>Enter Room Name</Text>
+                <TextInput
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
+                  value={roomName}
+                  onChangeText={text => setRoomName(text)}
+                  placeholder="Room's Name"
+                />
                 <Text style={styles.gameTitle}>Enter Your Name</Text>
                 <TextInput
                   style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}

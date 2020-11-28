@@ -7,6 +7,25 @@ import Riddle from './Games/riddle';
 import * as firebase from 'firebase';
 import Fire from '../../firebaseConfig';
 
+
+// props THIS COMPONENT WILL RECEIVE
+//  - an Exit function to go back to home page
+//  - username
+//  - gameID
+
+// upon receive gameID => proceed to listen to changes made into that gameID
+// this room will have 2 parts
+//  - Waiting for all players to be ready
+//    - display names of all players in the room and a color dot indicator next to their name
+//    - if numOfPlayers == numOfReadyPlayers || numOfReadyPlayers == capacity => start the game 
+//    - update(status: in-game)
+//  - When game started
+//    HEADER - current question + number of players remainning
+//    BODY - game room 
+//    - handleRightAnswer => update(currentQuestionIndex + 1) to db 
+//    - handleWrongAnswer => update(currentplayers.pop(username), numOfPlayers -1)
+//    - if number of remaining players == 0 => remove the room
+
 export default function GameRoom(props) {
   // this room will receive data from backend, then generate question type base on the data receive
   const [insideAQuestion, setInsideAQuestion] = useState(false) // check if the player inside the game or not (or if they are ready). If they are not inside the game, check if they won or lost =>  4 states: "inProgress", "Win", "Lose", false

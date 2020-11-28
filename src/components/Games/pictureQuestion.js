@@ -13,17 +13,15 @@ import { StyleSheet, Text, ScrollView, Image, Alert, Button, KeyboardAvoidingVie
 export default function pictureQuestion(props) {
   const data = props.data
   const [question] = useState({
-    id: data.id,
-    title: data.title,
     question: data.question,
     answer: data.answer,
     images: data.images,
-    totalAttempts: data.totalAttempts,
+    attempts: data.attempts,
     hint: data.hint
   })
   const [userAnswer, setUserAnswer] = useState("")
   const [result, setResult] = useState(false)
-  const [userAttempts, setUserAttempts] = useState(data.totalAttempts)
+  const [userAttempts, setUserAttempts] = useState(data.attempts)
   return (
     <KeyboardAvoidingView style={styles.container}
       behavior="position">
@@ -48,7 +46,7 @@ export default function pictureQuestion(props) {
       </View>
       <TextInput
         style={styles.input}
-        // editable={userAttempts <= question.totalAttempts ? false : true}
+        // editable={userAttempts <= question.attempts ? false : true}
         onChangeText={text => setUserAnswer(text)}
         value={userAnswer}
       />
