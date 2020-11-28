@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Alert, TouchableOpacity, ScrollView, TextInput,
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
-import GameRoom from './gameRoom';
+import GameRoom from './gameRoomTemp';
 import * as firebase from 'firebase'
 
 const Lobby = (props) => {
@@ -14,9 +14,10 @@ const Lobby = (props) => {
   const [joinCode, setJoinCode] = useState('')
   const [joined, setJoined] = useState(false)
   const [joining, setJoining] = useState(false)
-  const [host, setHost] = useState('')
+  const [theme, setTheme] = useState('')
   const [gamesList, setGamesList] = useState([])
   const [loading, setLoading] = useState(true)
+  const [roomInfo, setRoomInfo] = useState({})
   const snapshotToObject = (snapshot) => {
     const returnObj = {};
     snapshot.forEach((childSnapshot) => {
@@ -42,16 +43,18 @@ const Lobby = (props) => {
   const listenForData = async () => {
     fetchData();
     Fire.db.getRef("games/").on("child_added", data => {
-      console.log("child_added called")
       var currentList = gamesList;
       currentList.push(snapshotToObject(data));
       setGamesList(currentList);
       setLoading(false);
     })
   }
+  const detachListener = async () => {
+    Fire.db.getRef("games/").off("value", listener);
+  }
 
   useEffect(() => {
-    listenForData();
+    joined ? detachListener() : listenForData();
   }, []);
 
 
@@ -65,13 +68,13 @@ const Lobby = (props) => {
         console.log(`Game ${gameID} does not exist`);
         return false;
       }
-      else if (snapshot.val()[gameID].question !== 0 || snapshot.val()[gameID].status !== 'lobby') {
+      else if (snapshot.val()[gameID].status !== 'lobby') {
         // Check to make sure game hasn't started yet
         console.log(`Game ${snapshot.val()[gameID].question} has already started`);
         alert('Game Already Started')
         return false;
       }
-      else if (snapshot.val()[gameID].playerCount == 4) {
+      else if (snapshot.val()[gameID].playerCount == roomInfo.capacity) {
         console.log('Max player count reached')
         alert('Game is full')
         return false;
@@ -81,7 +84,6 @@ const Lobby = (props) => {
       return true;
 
     } catch {
-      //console.error(error);
       console.log(`Could not check if game ${gameID} exists`);
       return false;
     }
@@ -96,42 +98,17 @@ const Lobby = (props) => {
       finalizeJoin(playerName.trim(), gameID)
     }
   }
-  function finalizeJoin(name, gameID) {
+  finalizeJoin = (name, gameID) => {
     Games.getRef('games/' + gameID + '/playerCount').set(firebase.database.ServerValue.increment(1))
-    //Games.getRef('players/' + gameID).push(name)
-    Games.getRef(`games/${gameID}/players/`).push(name)
+    let users = String(roomInfo.currentPlayers + "," + name);
+    Games.getRef(`games/${gameID}`).update({ "currentPlayers": users })
     setPlayerName(name);
     setJoinCode(gameID);
   }
   return (
     //Main Container
     <View style={styles.mainContainer}>
-      {/* BACK BUTTON */}
-      {
-        joining
-          ?
-          <TouchableOpacity
-            onPress={() => {
-              setJoinCode(''),
-                setJoining(false),
-                setHost('')
-            }}
-            style={styles.backButtonArea}>
-            <Image style={styles.backButtonImage} source={require('../images/back.png')} />
-          </TouchableOpacity>
-          :
-          <TouchableOpacity
-            onPress={() => props.home(false)}
-            style={styles.backButtonArea}>
-            <Image style={styles.backButtonImage} source={require('../images/back.png')} />
-          </TouchableOpacity>
-      }
-      {/* REFRESH BUTTON */}
-      <TouchableOpacity
-        onPress={() => fetchData()}
-        style={styles.refreshButtonArea}>
-        <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
-      </TouchableOpacity>
+
       {/* MAIN PAGE */}
       {
         // Loading Page to load data from backend
@@ -141,28 +118,54 @@ const Lobby = (props) => {
             <Text style={styles.title}>Loading ...</Text>
           </View>
           :
-          joined //After Joinning a Game
+          joined //INSIDE ROOM
             ?
             <View style={styles.container}>
               <GameRoom
-                style={{ alignItems: 'center' }}
-                playerName={playerName}
-                playerid={playerID}
-                setPlayerID={setPlayerID}
+                isHost={false}
+                username={playerName}
                 gameID={joinCode}
                 home={props.home}
               />
             </View>
-            :
+            : // LOBBY
             <View style={styles.container}>
+              {/* BACK BUTTON */}
+              {
+                joining
+                  ?
+                  <TouchableOpacity
+                    onPress={() => {
+                      setJoinCode(''),
+                        setJoining(false),
+                        setTheme('')
+                    }}
+                    style={styles.backButtonArea}>
+                    <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+                  </TouchableOpacity>
+                  :
+                  <TouchableOpacity
+                    onPress={() => props.home(false)}
+                    style={styles.backButtonArea}>
+                    <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+                  </TouchableOpacity>
+              }
+              {/* REFRESH BUTTON */}
+              <TouchableOpacity
+                onPress={() => fetchData()}
+                style={styles.refreshButtonArea}>
+                <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
+              </TouchableOpacity>
+              {/* LOBBY - THEME OF THE GAME */}
               <View style={{ marginHorizontal: 30 }}>
                 <Text style={styles.title}>
-                  {joining ? host : "Lobby"}
+                  {joining ? theme : "Lobby"}
                 </Text>
               </View>
               {
                 joining
                   ?
+                  // JOINNING A ROOM
                   <View style={styles.lobby}>
                     <KeyboardAvoidingView
                       style={styles.descriptionBox}
@@ -172,12 +175,10 @@ const Lobby = (props) => {
                       <View style={styles.scrollView}>
                         <ScrollView>
                           <Text style={styles.descriptionText}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem, vel molestie sapien. Vivamus blandit gravida lorem, id ultrices urna elementum vitae. Nunc rhoncus finibus pellentesque. Quisque eu auctor justo. Proin ultrices, lorem sit amet commodo finibus, turpis odio commodo orci, eu accumsan diam erat a turpis. Maecenas eu feugiat enim, id ultricies velit. Maecenas lobortis velit a cursus auctor. In luctus rhoncus purus eu auctor. Integer aliquam nibh sit amet aliquam suscipit. Vivamus dignissim eros non orci rhoncus, eu ornare urna tincidunt. Nunc et ex gravida, imperdiet odio nec, mollis sem. Donec convallis ullamcorper felis id tempor. Curabitur non ipsum dapibus, tempor elit et, iaculis ex. Pellentesque blandit egestas dui, sed placerat.
+                            {roomInfo.description}
                           </Text>
                         </ScrollView>
                       </View>
-
-
                       <TextInput
                         style={styles.input}
                         value={playerName}
@@ -193,30 +194,30 @@ const Lobby = (props) => {
                       <Text style={{ fontSize: 30, color: 'green' }}>Enter</Text>
                     </TouchableOpacity>
                   </View>
-                  :
+                  : // LISTING ALL THE ROOMS IN THE DATABASE
                   <ScrollView>
                     {
                       gamesList.map((item, idx) =>
                         <View key={idx} style={styles.singleGame}>
-                          {/* {console.log("----------------------GAME INFO----------------------", item)} */}
                           <Text style={styles.roomName}>
-                            {item.host}
+                            {item.name}
                           </Text>
                           <View style={styles.horizonBox}>
                             <Image style={{ width: 30, height: 30 }} source={require('../images/human.png')} />
                             <Text style={styles.text}>
-                              {item.playerCount}/4
+                              {item.playerCount}/{item.capacity}
                             </Text>
                           </View>
                           {
-                            item.playerCount < 4 && item.status != 'in-game'
+                            item.playerCount < item.capacity && item.status != 'in-game'
                               ?
                               <TouchableOpacity
                                 style={styles.joinButtonArea}
                                 onPress={() => {
                                   setJoinCode(item.GameCode),
                                     setJoining(true),
-                                    setHost(item.host)
+                                    setTheme(item.theme),
+                                    setRoomInfo(item)
                                 }}>
                                 <Image style={styles.joinButtonImage} source={require('../images/back.png')} />
                               </TouchableOpacity>
@@ -230,7 +231,6 @@ const Lobby = (props) => {
                     }
                   </ScrollView>
               }
-
             </View>
       }
     </View>
@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'column',
     height: '100%',
-    paddingTop: '10%',
     backgroundColor: '#2b2d40'
   },
   backButtonArea: {
