@@ -165,7 +165,7 @@ const Lobby = (props) => {
               {
                 joining
                   ?
-                  // INSIDE A ROOM
+                  // JOINNING A ROOM
                   <View style={styles.lobby}>
                     <KeyboardAvoidingView
                       style={styles.descriptionBox}
@@ -216,8 +216,8 @@ const Lobby = (props) => {
                                 onPress={() => {
                                   setJoinCode(item.GameCode),
                                     setJoining(true),
-                                    setTheme(item.theme)
-                                  setRoomInfo(item)
+                                    setTheme(item.theme),
+                                    setRoomInfo(item)
                                 }}>
                                 <Image style={styles.joinButtonImage} source={require('../images/back.png')} />
                               </TouchableOpacity>

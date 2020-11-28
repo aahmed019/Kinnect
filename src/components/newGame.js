@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import data from "../games.json";
 import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, SafeAreaView, FlatList, TextInput, Keyboard, TouchableOpacity } from 'react-native';
 import Fire from '../../firebaseConfig';
-import GameRoom from './gameRoom';
+import GameRoom from './gameRoomTemp';
 //for creating games
 const Game = (props) => {
   //fix errors with useEffect( games = fire.db)
@@ -100,10 +100,10 @@ const Game = (props) => {
     while (await isNotValidGameID(newGameID)) {
       newGameID = makeGameID();
     }
+    setGameCode(newGameID);
     try {
       //create new game table for each game
       let gameRef = Games.getRef('games');
-      let tempCurrentPlayers = [name];
       let tempObject = {
         'timestamp': Date.now(),
         'name': roomName,
@@ -126,14 +126,6 @@ const Game = (props) => {
       console.log(tempObject)
       await gameRef.child(newGameID).set(tempObject).then(res => { alert("Game Added Successfully") }).catch(error => { console.log("Error in creating new room", error) })
       console.log(`Game created. ID: ${newGameID}`);
-      // Add host to game
-      // let ref = await Games.getRef(`games/${newGameID}/players/`).push(name.trim())
-      // setPlayerID(ref.key)
-      // Add player to 'waiting' state to indicate (to others) they haven't submitted words
-      // Games.getRef(`games/${newGameID}/waiting/${ref.key}`).set(name.trim());
-      // Games.getRef(`games/${newGameID}/host`).set(name.trim());
-      setGameCode(newGameID);
-
       await cleanDatabase();
       return true;
     }
@@ -180,9 +172,8 @@ const Game = (props) => {
     return (
       <View style={styles.container}>
         <GameRoom
-          style={{ alignItems: 'center' }}
-          hostid={playerID}
-          hostname={name}
+          isHost={true}
+          username={name}
           gameID={gameCode}
           home={props.home}
         />
@@ -252,7 +243,14 @@ const Game = (props) => {
                   ?
                   <View>
                     <Text>Room Information: {JSON.stringify(gameInfo, null, 2)}</Text>
-                    <Button title='Create Game' onPress={() => test() ? setCreated(true) : console.log('did not work')} />
+                    <Text>Room Owner: {name}</Text>
+                    <Button
+                      title='Create Game'
+                      onPress={async () => {
+                        await test()
+                          ? setCreated(true)
+                          : alert("Error Creating New Room")
+                      }} />
 
                   </View>
                   : null

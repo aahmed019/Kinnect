@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, Alert, ScrollView, Button, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import PictureQuestion from './Games/pictureQuestion';
 import Hangman from './Games/hangman';
-import sampleGames from './Games/sampleQuestions.json';
 import Riddle from './Games/riddle';
 import * as firebase from 'firebase';
 import Fire from '../../firebaseConfig';
@@ -39,10 +38,10 @@ export default function GameRoom(props) {
   const [currentChallengeType, setCurrentChallengeType] = useState("");
 
   const fetchData = async () => {
-    Fire.db.getRef("games/" + props.gameID).on("value", data => {
+    await Fire.db.getRef("games/" + props.gameID).on("value", data => {
       setRoomInfo(data.val());
-      setUsers(data.val().currentPlayers.split(","))
-      setCurrentChallengeType(data.val().challenges[data.val().atQuestion].type)
+      setUsers(data.val().currentPlayers.split(","));
+      setCurrentChallengeType(data.val().challenges[data.val().atQuestion].type);
       if (data.val().ready < data.val().playerCount) {
         setRoomState('!ready')
       } else {
