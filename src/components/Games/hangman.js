@@ -15,19 +15,18 @@ const Hangman = (props) => {
   const data = props.data
   const [question, setQuestion] = useState({
     question: data.question,
-    attemps: data.attemps,
+    attempts: data.attempts,
     answer: data.answer,
+    hint: data.hint
   })
   const [mistake, setMistake] = useState(0);
   const [Guessed, setGuessed] = useState(new Set()); //use .has, .delete, and .add
   const [totalGuess, setTotalGuess] = useState(0)
-  const [answer, setAnswer] = useState(randomword())
+  const [answer, setAnswer] = useState(question.answer)
   const defaults = {
     images: [img0, img1, img2, img3, img4, img5, img6]
   }
-  function randomword() {
-    return question.answer[Math.floor(Math.random() * question.answer.length)].toLowerCase()
-  }
+  
 
   function Guess() {
     return answer.split("").map(letter => (Guessed.has(letter) ? letter : ' _ '))
@@ -67,7 +66,7 @@ const Hangman = (props) => {
   }
 
 
-  const GameOver = mistake >= question.attemps;
+  const GameOver = mistake >= question.attempts;
   const isWinner = Guess().join("") === answer
   let gameKeys = generateKeyboard();
 
@@ -83,9 +82,8 @@ const Hangman = (props) => {
 
   return (
     <View style={{ backgroundColor: '#2b2d40' }}>
-      <Text style={styles.Text}>{question.title}:</Text>
       <Text style={styles.Text}>{question.question}</Text>
-      <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.attemps}</Text>
+      <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.attempts}</Text>
       <Text>{'\n'}</Text>
 
       <Image style={styles.Images} source={defaults.images[mistake]}></Image>
@@ -95,6 +93,8 @@ const Hangman = (props) => {
       <Text>{'\n'}</Text>
       <View style={styles.Keyboard}>{gameKeys}</View>
       {console.log(answer)}
+      <Text>{'\n\n\n\n\n\n\n'}</Text>
+      <Text style={styles.Text}>Hint: {question.hint}</Text>
 
 
     </View>

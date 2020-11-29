@@ -7,12 +7,10 @@ import { StyleSheet, Text, View, Alert, Button , TouchableOpacity } from 'react-
 const Support = (props) => {
   return (
     <View>
-      {
-        !back
-          ? <View style={styles.container}>
+          <View style={styles.container}>
            
              <Text>{"\n"}</Text>
-             <Button style={styles.button} title='Back' onPress={() => setBack(true)} />
+             <Button style={styles.button} title='Back' onPress={() => props.home(false)} />
            <Text style={styles.title}>About Us</Text>
             <Text>{"\n"}</Text>
             <Text style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem, vel molestie sapien. Vivamus blandit gravida lorem, id ultrices urna elementum vitae. Nunc rhoncus finibus pellentesque. Quisque eu auctor justo. Proin ultrices, lorem sit amet commodo finibus, turpis odio commodo orci, eu accumsan diam erat a turpis. Maecenas eu feugiat enim, id ultricies velit. Maecenas lobortis velit a cursus auctor. In luctus rhoncus purus eu auctor. Integer aliquam nibh sit amet aliquam suscipit. Vivamus dignissim eros non orci rhoncus, eu ornare urna tincidunt. Nunc et ex gravida, imperdiet odio nec, mollis sem. Donec convallis ullamcorper felis id tempor. Curabitur non ipsum dapibus, tempor elit et, iaculis ex. Pellentesque blandit egestas dui, sed placerat.
@@ -20,8 +18,7 @@ const Support = (props) => {
              
       <Text>{"\n"}</Text>
           </View>
-          : <Home />
-      }
+           
     </View>
 
   );

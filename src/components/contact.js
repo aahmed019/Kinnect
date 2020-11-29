@@ -4,15 +4,12 @@ import { StyleSheet, Text, View, TouchableOpacity , TextInput } from 'react-nati
 
 
 const Contact = (props) => {
-  const [back, setBack] = useState(false)
   
   return (
     <View>
-      {
-        !back
-          ? <View style={styles.container}>
+        <View style={styles.container}>
             
-            <TouchableOpacity  onPress={() => setBack(true)} style={styles.button}><Text style ={styles.buttontext}>Back</Text></TouchableOpacity>
+            <TouchableOpacity  onPress={() => props.home(false)} style={styles.button}><Text style ={styles.buttontext}>Back</Text></TouchableOpacity>
             <Text style={styles.title}>Contact Us</Text>
            
             <Text style={styles.tag}>Name:</Text>
@@ -28,8 +25,8 @@ const Contact = (props) => {
        <TouchableOpacity   style={styles.submitbutton}><Text style ={styles.buttontext}>Submit</Text></TouchableOpacity>
           
           </View>
-          : <Home />
-      }
+         
+      
     </View>
   );
 }

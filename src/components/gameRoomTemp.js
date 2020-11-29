@@ -153,11 +153,16 @@ export default function GameRoom(props) {
           : roomState === "ingame" // IN-GAME
             ?
             <View key={roomInfo.atQuestion}>
-              <Riddle
+              {/* <Riddle
                 number={roomInfo.atQuestion}
                 data={roomInfo.challenges[roomInfo.atQuestion]}
                 rightAnswer={() => { handleRightAnswer() }}
                 wrongAnswer={() => { handleWrongAnswer() }}
+              /> */}
+              <Hangman
+              data={roomInfo.challenges[roomInfo.atQuestion]}
+              rightAnswer={() => { handleRightAnswer() }}
+              wrongAnswer={() => { handleWrongAnswer() }}
               />
             </View>
             : roomState === "win" // WIN PAGE
