@@ -153,18 +153,32 @@ export default function GameRoom(props) {
           : roomState === "ingame" // IN-GAME
             ?
             <View key={roomInfo.atQuestion}>
-              {/* <Riddle
-                number={roomInfo.atQuestion}
-                data={roomInfo.challenges[roomInfo.atQuestion]}
-                rightAnswer={() => { handleRightAnswer() }}
-                wrongAnswer={() => { handleWrongAnswer() }}
-              /> */}
-              <Hangman
-                number={roomInfo.atQuestion}
-                data={roomInfo.challenges[roomInfo.atQuestion]}
-                rightAnswer={() => { handleRightAnswer() }}
-                wrongAnswer={() => { handleWrongAnswer() }}
-              />
+              {
+                roomInfo.challenges[roomInfo.atQuestion].type == "riddle"
+                  ?
+                  <Riddle
+                    number={roomInfo.atQuestion}
+                    data={roomInfo.challenges[roomInfo.atQuestion]}
+                    rightAnswer={() => { handleRightAnswer() }}
+                    wrongAnswer={() => { handleWrongAnswer() }}
+                  />
+                  : roomInfo.challenges[roomInfo.atQuestion].type == "picture"
+                    ?
+                    <PictureQuestion
+                      number={roomInfo.atQuestion}
+                      data={roomInfo.challenges[roomInfo.atQuestion]}
+                      rightAnswer={() => { handleRightAnswer() }}
+                      wrongAnswer={() => { handleWrongAnswer() }}
+                    />
+                    :
+                    <Hangman
+                      number={roomInfo.atQuestion}
+                      data={roomInfo.challenges[roomInfo.atQuestion]}
+                      rightAnswer={() => { handleRightAnswer() }}
+                      wrongAnswer={() => { handleWrongAnswer() }}
+                    />
+              }
+
             </View>
             : roomState === "win" // WIN PAGE
               ?

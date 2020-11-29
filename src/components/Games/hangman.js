@@ -71,13 +71,12 @@ const Hangman = (props) => {
   let gameKeys = generateKeyboard();
 
   if (isWinner) {
-    alert("You Won!")
     props.rightAnswer()
   }
 
   else if (GameOver) {
     alert("You Lost! The answer was " + answer)
-    props.rightAnswer()
+    props.wrongAnswer()
   }
 
   return (
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2b2d40',
     color: 'white',
     textAlign: 'center',
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   Images: {
     width: 212,

@@ -266,7 +266,8 @@ const Game = (props) => {
 const styles = StyleSheet.create({
   container1: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#2b2d40',
   },
   container: {
     backgroundColor: '#2b2d40',
