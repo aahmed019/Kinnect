@@ -183,12 +183,14 @@ export default function GameRoom(props) {
             : roomState === "win" // WIN PAGE
               ?
               <View>
-                <Text>Congratulations</Text>
+                <Text style={styles.title}>Victory</Text>
+                <Text style={styles.text}>Congratulations on clearing the game!</Text>
                 <Button title="Back" onPress={() => { props.home(false) }} />
               </View>
               : // LOST PAGE
               <View>
-                <Text>Mission Failed, We'll Success Next Time</Text>
+                <Text style={styles.title}>Defeated</Text>
+                <Text style={styles.text}>YOU'RE DEAD!</Text>
                 <Button title="Back" onPress={() => { props.home(false) }} />
               </View>
         }

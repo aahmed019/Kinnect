@@ -157,7 +157,7 @@ const Lobby = (props) => {
                 <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
               </TouchableOpacity>
               {/* LOBBY - THEME OF THE GAME */}
-              <View style={{ marginHorizontal: 30 }}>
+              <View style={{ marginHorizontal: 30, paddingTop: 20 }}>
                 <Text style={styles.title}>
                   {joining ? theme : "Lobby"}
                 </Text>
@@ -209,7 +209,7 @@ const Lobby = (props) => {
                             </Text>
                           </View>
                           {
-                            item.playerCount < item.capacity && item.status != 'in-game'
+                            item.playerCount < item.capacity && item.status == 'lobby'
                               ?
                               <TouchableOpacity
                                 style={styles.joinButtonArea}
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   backButtonArea: {
     position: 'absolute',
     width: 50,
-    top: '7%',
+    top: '2%',
     start: 5,
     zIndex: 1,
 
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   refreshButtonArea: {
     position: 'absolute',
     width: 50,
-    top: '7%',
+    top: '2%',
     right: 5,
     zIndex: 1
   },
@@ -316,11 +316,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#2b2d40'
   },
   title: {
-    fontSize: 30,
+    fontSize: 50,
     textAlign: "center",
     backgroundColor: '#2b2d40',
     color: 'white',
-    paddingBottom: '10%',
+    fontFamily: 'AppleSDGothicNeo-Light',
+    fontWeight: '900',
+    paddingBottom: 20,
   },
   roomName: {
     width: '40%',

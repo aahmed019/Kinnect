@@ -167,21 +167,18 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'yellow',
-    borderWidth: 5
   },
   itemsContainer: {
     display: 'flex',
     height: '50%',
     width: '100%',
     justifyContent: 'space-around',
-    borderColor: 'orange',
-    borderWidth: 5
   },
   title: {
     fontFamily: 'AppleSDGothicNeo-Light',
     fontSize: 80,
     color: 'white',
+    fontWeight: '900',
   },
 
   items: {
