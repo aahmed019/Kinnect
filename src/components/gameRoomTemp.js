@@ -160,9 +160,10 @@ export default function GameRoom(props) {
                 wrongAnswer={() => { handleWrongAnswer() }}
               /> */}
               <Hangman
-              data={roomInfo.challenges[roomInfo.atQuestion]}
-              rightAnswer={() => { handleRightAnswer() }}
-              wrongAnswer={() => { handleWrongAnswer() }}
+                number={roomInfo.atQuestion}
+                data={roomInfo.challenges[roomInfo.atQuestion]}
+                rightAnswer={() => { handleRightAnswer() }}
+                wrongAnswer={() => { handleWrongAnswer() }}
               />
             </View>
             : roomState === "win" // WIN PAGE

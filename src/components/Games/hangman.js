@@ -26,7 +26,7 @@ const Hangman = (props) => {
   const defaults = {
     images: [img0, img1, img2, img3, img4, img5, img6]
   }
-  
+
 
   function Guess() {
     return answer.split("").map(letter => (Guessed.has(letter) ? letter : ' _ '))
@@ -81,40 +81,40 @@ const Hangman = (props) => {
   }
 
   return (
-    <View style={{ backgroundColor: '#2b2d40' }}>
-      <Text style={styles.Text}>{question.question}</Text>
-      <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.attempts}</Text>
-      <Text>{'\n'}</Text>
+    <View style={styles.mainView}>
+      <View>
+        <Text style={styles.Text}>No.{props.number + 1}</Text>
+        <Text style={styles.Text}>{question.question}</Text>
+        <Text style={styles.Text}>Wrong Guesses: {mistake} of {question.attempts}</Text>
+      </View>
 
       <Image style={styles.Images} source={defaults.images[mistake]}></Image>
-      <Text style={styles.Text}>
-        {!GameOver ? Guess() : answer}
-      </Text>
-      <Text>{'\n'}</Text>
-      <View style={styles.Keyboard}>{gameKeys}</View>
-      {console.log(answer)}
-      <Text>{'\n\n\n\n\n\n\n'}</Text>
-      <Text style={styles.Text}>Hint: {question.hint}</Text>
-
-
+      <View>
+        <Text style={styles.Text}>
+          {!GameOver ? Guess() : answer}
+        </Text>
+        <View style={styles.Keyboard}>{gameKeys}</View>
+        {console.log(answer)}
+        <Text style={styles.Text}>Hint: {question.hint}</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  Title: {
-    fontSize: 50,
-    textAlign: "center",
+  mainView: {
+    marginTop: '5%',
+    width: '100%',
+    height: '95%',
     backgroundColor: '#2b2d40',
-    color: 'white',
-
+    justifyContent: 'space-between'
   },
   Text: {
     fontSize: 20,
-    paddingTop: '10%',
     backgroundColor: '#2b2d40',
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingBottom: 5,
   },
   Images: {
     width: 212,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   gameText: {
     fontSize: 20,
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: '#2b2d40',
     textAlign: 'center',
     color: 'white'

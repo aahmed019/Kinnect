@@ -170,7 +170,7 @@ const Game = (props) => {
 
   if (created) {
     return (
-      <View style={styles.container}>
+      <View style={styles.container1}>
         <GameRoom
           isHost={true}
           username={name}
@@ -264,6 +264,10 @@ const Game = (props) => {
 
 }
 const styles = StyleSheet.create({
+  container1: {
+    width: '100%',
+    height: '100%'
+  },
   container: {
     backgroundColor: '#2b2d40',
     width: '100%',
