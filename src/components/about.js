@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Home from './Home'
-import { StyleSheet, Text, View, Alert, Button , TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Alert, Button , TouchableOpacity, SafeAreaView } from 'react-native';
 
 // import Button from 'apsl-react-native-button';
 
 const Support = (props) => {
   return (
-    <View>
-          <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
            
              <Text>{"\n"}</Text>
              <Button style={styles.button} title='Back' onPress={() => props.home(false)} />
@@ -17,9 +16,8 @@ const Support = (props) => {
              {"\n"}Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem,</Text>
              
       <Text>{"\n"}</Text>
-          </View>
-           
-    </View>
+          </SafeAreaView>
+
 
   );
 }
