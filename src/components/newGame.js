@@ -167,10 +167,9 @@ const Game = (props) => {
     }
   }
   //-----------------------------------END OF HELPER FUNCTIONS-----------------------------------
-
   if (created) {
     return (
-      <View style={styles.container1}>
+      <View style={styles.container}>
         <GameRoom
           isHost={true}
           username={name}
@@ -181,52 +180,75 @@ const Game = (props) => {
   }
   else {
     return (
-      <ScrollView style={styles.container}>
-        <TouchableOpacity
-          style={styles.backButtonArea}
-          onPress={() => props.home(false)} >
-          <Image style={styles.backButtonImage} source={require('../images/back.png')} />
-        </TouchableOpacity>
-        <Text style={styles.Title} >Create Game Page</Text>
+      <SafeAreaView style={styles.container}>
+        <View style={{
+          width: '100%',
+          height: '20%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row'
+        }}>
+          <TouchableOpacity
+            style={styles.backButtonArea}
+            onPress={() => props.home(false)}
+          >
+            <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+          </TouchableOpacity>
+          <Text style={styles.Title}>
+            {
+              page == 0
+                ? 'New Room'
+                : page == 1
+                  ? 'Theme'
+                  : 'Verify'
+            }
+          </Text>
+        </View>
         {loading
           ?
           <Text>LOADING ...</Text>
           :
-          <View style={{ paddingHorizontal: '2%' }}>
+          <View style={{ paddingHorizontal: '2%', height: '80%' }}>
             {page == 0
               ?
-              <View>
-                <Text style={styles.gameTitle}>Enter Room Name</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
-                  value={roomName}
-                  onChangeText={text => setRoomName(text)}
-                  placeholder="Room's Name"
-                />
-                <Text style={styles.gameTitle}>Enter Your Name</Text>
-                <TextInput
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white' }}
-                  value={name}
-                  onChangeText={text => setName(text)}
-                  placeholder='Name'
-                />
-                <TouchableOpacity onPress={() => { setPage(page + 1) }}>
-                  <Text>Next</Text>
+              <View style={styles.roomInfo}>
+                <View>
+                  <Text style={styles.gameTitle}>Enter Room Name</Text>
+                  <TextInput
+                    style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white', marginBottom: 20 }}
+                    value={roomName}
+                    onChangeText={text => setRoomName(text)}
+                    placeholder="Room's Name"
+                  />
+                </View>
+                <View>
+                  <Text style={styles.gameTitle}>Enter Your Name</Text>
+                  <TextInput
+                    style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: 'white', marginBottom: 40 }}
+                    value={name}
+                    onChangeText={text => setName(text)}
+                    placeholder='Name'
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.nextButtonArea}
+                  onPress={() => { setPage(page + 1) }}>
+                  <Text style={styles.nextButton}>Next</Text>
                 </TouchableOpacity>
               </View>
               : page == 1
                 ?
-                <View>
-                  <Text style={styles.gameTitle}>Pick A Theme</Text>
+                <ScrollView style={styles.body}>
                   {data.map((item, idx) => {
                     return (
-                      <View key={idx}>
+                      <View style={styles.themeBox} key={idx}>
                         <Text style={styles.gameTitle}>{item.DOC_DATA.name}</Text>
                         <View style={{ flexDirection: 'row', }}>
                           <View style={{ width: '80%' }}>
-                            <Text>Capacity: {item.DOC_DATA.numOfPlayers}</Text>
-                            <Text>Trials: {item.DOC_DATA.numOfQuestions}</Text>
-                            <Text>Description: {item.DOC_DATA.description}</Text>
+                            <Text style={styles.gameText}>Capacity: {item.DOC_DATA.numOfPlayers}</Text>
+                            <Text style={styles.gameText}>Trials: {item.DOC_DATA.numOfQuestions}</Text>
+                            <Text style={styles.gameText}
+                              numberOfLines={3}>Description: {item.DOC_DATA.description}</Text>
                           </View>
                           <TouchableOpacity
                             key={idx}
@@ -238,10 +260,10 @@ const Game = (props) => {
                       </View>
                     )
                   })}
-                </View>
+                </ScrollView>
                 : page == 2
                   ?
-                  <View>
+                  <ScrollView style={styles.body}>
                     <Text>Room Information: {JSON.stringify(gameInfo, null, 2)}</Text>
                     <Text>Room Owner: {name}</Text>
                     <Button
@@ -251,44 +273,39 @@ const Game = (props) => {
                           ? setCreated(true)
                           : alert("Error Creating New Room")
                       }} />
-
-                  </View>
+                  </ScrollView>
                   : null
             }
 
           </View>
         }
-      </ScrollView>
+      </SafeAreaView>
     );
   }
 
 }
 const styles = StyleSheet.create({
-  container1: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#2b2d40',
-  },
   container: {
     backgroundColor: '#2b2d40',
     width: '100%',
-    borderWidth: 1,
-    borderColor: 'yellow'
+    height: '100%',
   },
-  Games: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    paddingBottom: '20%',
+  body: {
+    height: '80%',
+    width: '100%',
   },
+  roomInfo: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'flex-start',
+  },
+
   Title: {
-    fontSize: 30,
-    backgroundColor: '#2b2d40',
+    fontSize: 40,
+    width: '100%',
     textAlign: 'center',
-    padding: 20,
     color: 'white',
     fontWeight: '900',
-    borderWidth: 1,
-    borderColor: 'orange',
   },
   Text: {
     fontSize: 20,
@@ -301,12 +318,21 @@ const styles = StyleSheet.create({
     width: 212,
     height: 212
   },
+  themeBox: {
+    paddingBottom: 20,
+    marginBottom: 10,
+    borderBottomWidth: 3,
+    borderRadius: 20,
+    borderColor: 'red'
+  },
   gameText: {
-    fontSize: 20,
-    padding: 20,
-    backgroundColor: '#2b2d40',
-    textAlign: 'center',
+    fontSize: 15,
     color: 'white'
+  },
+  gameTitle: {
+    fontSize: 25,
+    color: 'white',
+    paddingBottom: 10,
   },
   innerContainer: {
     flexDirection: 'row',
@@ -318,24 +344,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'orange'
   },
+  nextButtonArea: {
+    marginHorizontal: 100,
+    marginVertical: 5,
+    paddingVertical: 20,
+    backgroundColor: 'rgb(62,180,137)',
+    borderRadius: 5,
+  },
   backButtonArea: {
     position: 'absolute',
-    width: 50,
-    top: 23,
-    start: 5,
-    zIndex: 1,
+    start: '2%',
+    zIndex: 99
   },
   backButtonImage: {
-    width: 30,
-    height: 30
+    width: 40,
+    height: 40
   },
   selectButtonImage: {
     width: 40,
     height: 40,
     transform: [{ rotate: '180deg' }]
   },
-  gameTitle: {
-    fontSize: 25,
+  nextButton: {
+    fontSize: 30,
+    color: 'white',
+    textAlign: 'center',
   }
 })
 export default Game;

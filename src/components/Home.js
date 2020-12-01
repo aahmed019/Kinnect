@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Game from './newGame';
 import About from './about';
 import Functionalities from './functionalities';
-import { StyleSheet, Text, View, Alert, Image, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Alert, Image, TouchableOpacity } from 'react-native';
 import Lobby from './lobby';
 import Contact from './contact';
 
@@ -73,6 +73,7 @@ export default function App() {
     return (
       <View style={styles.container}>
 
+
         {showAds
           ? <AdMobBanner
             style={styles.adContainer}
@@ -130,7 +131,6 @@ export default function App() {
             setContactPage(false)
             setTestingPage(true)
           }}>Functionalities</Text>
-          {/* <Text>{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}{'\n'}</Text> */}
           {
             showAds
               ? <Text style={styles.items} onPress={() => {
@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '900',
   },
-
   items: {
     fontFamily: 'AppleSDGothicNeo-UltraLight',
     fontSize: 30,

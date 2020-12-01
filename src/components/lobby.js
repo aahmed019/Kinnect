@@ -1,6 +1,6 @@
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Alert, TouchableOpacity, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Alert, TouchableOpacity, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
@@ -107,7 +107,7 @@ const Lobby = (props) => {
   }
   return (
     //Main Container
-    <View style={styles.mainContainer}>
+    <SafeAreaView style={styles.mainContainer}>
 
       {/* MAIN PAGE */}
       {
@@ -130,34 +130,41 @@ const Lobby = (props) => {
             </View>
             : // LOBBY
             <View style={styles.container}>
-              {/* BACK BUTTON */}
-              {
-                joining
-                  ?
-                  <TouchableOpacity
-                    onPress={() => {
-                      setJoinCode(''),
-                        setJoining(false),
-                        setTheme('')
-                    }}
-                    style={styles.backButtonArea}>
-                    <Image style={styles.backButtonImage} source={require('../images/back.png')} />
-                  </TouchableOpacity>
-                  :
-                  <TouchableOpacity
-                    onPress={() => props.home(false)}
-                    style={styles.backButtonArea}>
-                    <Image style={styles.backButtonImage} source={require('../images/back.png')} />
-                  </TouchableOpacity>
-              }
-              {/* REFRESH BUTTON */}
-              <TouchableOpacity
-                onPress={() => fetchData()}
-                style={styles.refreshButtonArea}>
-                <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
-              </TouchableOpacity>
-              {/* LOBBY - THEME OF THE GAME */}
-              <View style={{ marginHorizontal: 30, paddingTop: 20 }}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '15%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row'
+                }}>
+                {/* BACK BUTTON */}
+                {
+                  joining
+                    ?
+                    <TouchableOpacity
+                      onPress={() => {
+                        setJoinCode(''),
+                          setJoining(false),
+                          setTheme('')
+                      }}
+                      style={styles.backButtonArea}>
+                      <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
+                      onPress={() => props.home(false)}
+                      style={styles.backButtonArea}>
+                      <Image style={styles.backButtonImage} source={require('../images/back.png')} />
+                    </TouchableOpacity>
+                }
+                {/* REFRESH BUTTON */}
+                <TouchableOpacity
+                  onPress={() => fetchData()}
+                  style={styles.refreshButtonArea}>
+                  <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
+                </TouchableOpacity>
+                {/* LOBBY - THEME OF THE GAME */}
                 <Text style={styles.title}>
                   {joining ? theme : "Lobby"}
                 </Text>
@@ -233,39 +240,36 @@ const Lobby = (props) => {
               }
             </View>
       }
-    </View>
+    </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'column',
     height: '100%',
+    width: '100%',
     backgroundColor: '#2b2d40'
   },
   backButtonArea: {
     position: 'absolute',
-    width: 50,
-    top: '2%',
-    start: 5,
-    zIndex: 1,
-
+    start: '2%',
+    zIndex: 99,
   },
   refreshButtonArea: {
     position: 'absolute',
-    width: 50,
-    top: '2%',
-    right: 5,
-    zIndex: 1
+    end: '2%',
+    zIndex: 99
   },
   backButtonImage: {
-    width: 50,
-    height: 50
+    width: 40,
+    height: 40
   },
   container: {
     height: '100%'
   },
   lobby: {
     flex: 1,
+    height: '85%',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -316,13 +320,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#2b2d40'
   },
   title: {
-    fontSize: 50,
-    textAlign: "center",
-    backgroundColor: '#2b2d40',
+    fontSize: 45,
+    width: '100%',
+    textAlign: 'center',
     color: 'white',
-    fontFamily: 'AppleSDGothicNeo-Light',
     fontWeight: '900',
-    paddingBottom: 20,
   },
   roomName: {
     width: '40%',
