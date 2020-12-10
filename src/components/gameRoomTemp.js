@@ -29,10 +29,11 @@ import Fire from '../../firebaseConfig';
 export default function GameRoom(props) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState(props.username);
+  const [usernamesString, setUsernamesString] = useState('');
   const [gameID, setGameID] = useState(props.gameID);
   const [isHost, setIsHost] = useState(props.isHost);
   const [ready, setReady] = useState(false);
-  const [roomState, setRoomState] = useState("!ready"); //!ready , ready, ingame, win, lost
+  const [roomState, setRoomState] = useState("waiting"); //!ready , ready, ingame, win, lost
   const [roomInfo, setRoomInfo] = useState({});
   const [users, setUsers] = useState([]);
   const [currentChallengeType, setCurrentChallengeType] = useState("");
@@ -40,21 +41,19 @@ export default function GameRoom(props) {
   const fetchData = async () => {
     await Fire.db.getRef("games/" + props.gameID).on("value", data => {
       setRoomInfo(data.val());
+      setUsernamesString(data.val().currentPlayers);
       setUsers(data.val().currentPlayers.split(","));
       setCurrentChallengeType(data.val().challenges[data.val().atQuestion].type);
-      if (data.val().ready < data.val().playerCount) {
-        setRoomState('!ready')
-      } else {
-        if (data.val().status === 'lobby') { setRoomState('ready') }
-        else { setRoomState(data.val().status) }
-      }
+      if (data.val().status === 'lobby') { setRoomState('waiting') }
+      else { setRoomState('ingame') }
       setLoading(false);
     })
   }
-  const detachListener = () => { Fire.db.getRef("games/" + props.gameID).off("value", data) }
+  const detachListener = () => { Fire.db.getRef("games/" + props.gameID).off("value", response => { console.log("Detach Listener") }) }
 
   useEffect(() => {
     fetchData()
+    return detachListener();
   }, [])
 
 
@@ -62,7 +61,7 @@ export default function GameRoom(props) {
   // READY FUNCTION
   const getReady = () => {
     setReady(true)
-    Fire.db.getRef("games/" + props.gameID).update({ "ready": firebase.database.ServerValue.increment(1) })
+    Fire.db.getRef("games/" + props.gameID).update({ "ready": roomInfo.ready + 1 })
   }
   // START GAME FUNCTION
   const startGame = () => {
@@ -72,21 +71,21 @@ export default function GameRoom(props) {
   const handleRightAnswer = () => {
     // if not last question
     if (roomInfo.atQuestion + 1 < roomInfo.totalQuestion) {
-      Fire.db.getRef("games/" + props.gameID).update({ "atQuestion": firebase.database.ServerValue.increment(1) })
+      Fire.db.getRef("games/" + props.gameID).update({ "atQuestion": roomInfo.atQuestion + 1 })
     } else { // if last question
       Fire.db.getRef("games/" + props.gameID).update({ "status": "win" })
+      props.handleVictory(usernamesString)
+      props.handleDefeat('victory')
     }
+
   }
   // SUBMIT WRONG ANSWER
   // - will not be removed from the game, the app will stop listen to changes or just render blue screen of dead
   const handleWrongAnswer = () => {
-    // if not last person in the game
-    if (roomInfo.playerCount > 1) {
-      Fire.db.getRef("games/" + props.gameID).update({ "playerCount": roomInfo.playerCount - 1 })
-    } else {
-      Fire.db.getRef("games/" + props.gameID).update({ "playerCount": roomInfo.playerCount - 1, "status": "lost" })
-    }
-    setRoomState('lost')
+    let usersString = usernamesString.replace(username + ',', '');
+    Fire.db.getRef("games/" + props.gameID).update({ "currentPlayers": usersString })
+    // SET LOSS
+    props.handleDefeat('defeat')
   }
 
   const deleteRoom = () => {
@@ -110,19 +109,21 @@ export default function GameRoom(props) {
   } else { // WAITING ROOM
     return (
       <View style={styles.mainView}>
-        {roomState === "!ready" || roomState === "ready"
+        {roomState === "waiting"
           ?
           <View>
             <Text style={styles.title}>{roomInfo.theme}</Text>
             <Text style={styles.subtitle}>Hey {username},</Text>
             <ScrollView style={{ height: '60%', marginBottom: '5%' }}>
               {users.map((user, idx) => {
-                return (
-                  <View style={styles.horizontalBox} key={idx}>
-                    <Image style={{ width: 40, height: 40 }} source={require('../images/human.png')} />
-                    <Text style={styles.text}>{user}</Text>
-                  </View>
-                )
+                if (user !== '') {
+                  return (
+                    <View style={styles.horizontalBox} key={idx}>
+                      <Image style={{ width: 40, height: 40 }} source={require('../images/human.png')} />
+                      <Text style={styles.text}>{user}</Text>
+                    </View>
+                  )
+                } else { null }
               })}
             </ScrollView>
             <Text style={styles.subtitle2}>Ready Players: {roomInfo.ready} / {roomInfo.playerCount}</Text>
@@ -150,49 +151,34 @@ export default function GameRoom(props) {
               <Button title="Back" onPress={() => { props.home(false) }} />
             </View>
           </View>
-          : roomState === "ingame" // IN-GAME
-            ?
-            <View key={roomInfo.atQuestion}>
-              {
-                roomInfo.challenges[roomInfo.atQuestion].type == "riddle"
+          :
+          <View key={roomInfo.atQuestion}>
+            {
+              roomInfo.challenges[roomInfo.atQuestion].type == "riddle"
+                ?
+                <Riddle
+                  number={roomInfo.atQuestion}
+                  data={roomInfo.challenges[roomInfo.atQuestion]}
+                  rightAnswer={() => { handleRightAnswer() }}
+                  wrongAnswer={() => { handleWrongAnswer() }}
+                />
+                : roomInfo.challenges[roomInfo.atQuestion].type == "picture"
                   ?
-                  <Riddle
+                  <PictureQuestion
                     number={roomInfo.atQuestion}
                     data={roomInfo.challenges[roomInfo.atQuestion]}
                     rightAnswer={() => { handleRightAnswer() }}
                     wrongAnswer={() => { handleWrongAnswer() }}
                   />
-                  : roomInfo.challenges[roomInfo.atQuestion].type == "picture"
-                    ?
-                    <PictureQuestion
-                      number={roomInfo.atQuestion}
-                      data={roomInfo.challenges[roomInfo.atQuestion]}
-                      rightAnswer={() => { handleRightAnswer() }}
-                      wrongAnswer={() => { handleWrongAnswer() }}
-                    />
-                    :
-                    <Hangman
-                      number={roomInfo.atQuestion}
-                      data={roomInfo.challenges[roomInfo.atQuestion]}
-                      rightAnswer={() => { handleRightAnswer() }}
-                      wrongAnswer={() => { handleWrongAnswer() }}
-                    />
-              }
-
-            </View>
-            : roomState === "win" // WIN PAGE
-              ?
-              <View>
-                <Text style={styles.title}>Victory</Text>
-                <Text style={styles.text}>Congratulations on clearing the game!</Text>
-                <Button title="Back" onPress={() => { props.home(false) }} />
-              </View>
-              : // LOST PAGE
-              <View>
-                <Text style={styles.title}>Defeated</Text>
-                <Text style={styles.text}>YOU'RE DEAD!</Text>
-                <Button title="Back" onPress={() => { props.home(false) }} />
-              </View>
+                  :
+                  <Hangman
+                    number={roomInfo.atQuestion}
+                    data={roomInfo.challenges[roomInfo.atQuestion]}
+                    rightAnswer={() => { handleRightAnswer() }}
+                    wrongAnswer={() => { handleWrongAnswer() }}
+                  />
+            }
+          </View>
         }
       </View>
     )

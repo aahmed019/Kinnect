@@ -1,6 +1,6 @@
 import { setAudioModeAsync } from 'expo-av/build/Audio';
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Alert, TouchableOpacity, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Alert, Button, TouchableOpacity, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native';
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import Fire from '../../firebaseConfig';
 import data from '../lobby.json';
@@ -18,6 +18,8 @@ const Lobby = (props) => {
   const [gamesList, setGamesList] = useState([])
   const [loading, setLoading] = useState(true)
   const [roomInfo, setRoomInfo] = useState({})
+  const [endGame, setEndGame] = useState('yeet')
+  const [winners, setWinners] = useState([])
   const snapshotToObject = (snapshot) => {
     const returnObj = {};
     snapshot.forEach((childSnapshot) => {
@@ -40,25 +42,14 @@ const Lobby = (props) => {
     })
   }
 
-  const listenForData = async () => {
-    fetchData();
-    Fire.db.getRef("games/").on("child_added", data => {
-      var currentList = gamesList;
-      currentList.push(snapshotToObject(data));
-      setGamesList(currentList);
-      setLoading(false);
-    })
-  }
   const detachListener = () => {
     Fire.db.getRef("games/").off("value", response => { console.log("Listener Detached") });
   }
 
   useEffect(() => {
     fetchData();
-    return detachListener();
+    // return detachListener();
   }, []);
-
-
 
   canUserJoinGame = async (gameID) => {
     console.log('Checking if game is valid...');
@@ -100,9 +91,8 @@ const Lobby = (props) => {
     }
   }
   finalizeJoin = (name, gameID) => {
-    Games.getRef('games/' + gameID + '/playerCount').set(firebase.database.ServerValue.increment(1))
-    let users = String(roomInfo.currentPlayers + "," + name);
-    Games.getRef(`games/${gameID}`).update({ "currentPlayers": users })
+    let users = String(roomInfo.currentPlayers + name + ",");
+    Games.getRef(`games/${gameID}`).update({ "currentPlayers": users, "playerCount": roomInfo.playerCount + 1 })
     setPlayerName(name);
     setJoinCode(gameID);
   }
@@ -120,15 +110,34 @@ const Lobby = (props) => {
           </View>
           :
           joined //INSIDE ROOM
-            ?
-            <View style={styles.container}>
-              <GameRoom
-                isHost={false}
-                username={playerName}
-                gameID={joinCode}
-                home={props.home}
-              />
-            </View>
+            ? endGame === 'yeet'
+              ?
+              <View style={styles.container}>
+                {console.log("Endgame State: ", endGame)}
+                <GameRoom
+                  isHost={false}
+                  username={playerName}
+                  gameID={joinCode}
+                  home={props.home}
+                  handleVictory={setWinners}
+                  handleDefeat={setEndGame}
+                />
+              </View>
+              : endGame === 'defeat'
+                ?
+                <View>
+                  {console.log("Endgame State: ", endGame)}
+                  <Text style={styles.title}>Defeated</Text>
+                  <Text style={styles.text}>YOU'RE DEAD!</Text>
+                  <Button title="Back" onPress={() => { props.home(false) }} />
+                </View>
+                :
+                <View>
+                  {console.log("Endgame State: ", endGame)}
+                  <Text style={styles.title}>Victory</Text>
+                  <Text style={styles.text}>Congratulations on clearing the game!</Text>
+                  <Button title="Back" onPress={() => { props.home(false) }} />
+                </View>
             : // LOBBY
             <View style={styles.container}>
               <View

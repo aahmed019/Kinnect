@@ -117,7 +117,7 @@ const Game = (props) => {
         'ready': 0,
         'GameCode': newGameID,
         'host': name,
-        'currentPlayers': name,
+        'currentPlayers': name + ',',
         'readyPlayers': [], //0 == NOT ready, 1 == ready
         'turnStartTimestamp': '',
         'turnTime': 60000,
