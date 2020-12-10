@@ -49,12 +49,13 @@ const Lobby = (props) => {
       setLoading(false);
     })
   }
-  const detachListener = async () => {
-    Fire.db.getRef("games/").off("value", listener);
+  const detachListener = () => {
+    Fire.db.getRef("games/").off("value", response => { console.log("Listener Detached") });
   }
 
   useEffect(() => {
-    joined ? detachListener() : listenForData();
+    fetchData();
+    return detachListener();
   }, []);
 
 
