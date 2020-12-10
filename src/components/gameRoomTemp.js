@@ -45,7 +45,11 @@ export default function GameRoom(props) {
       setUsers(data.val().currentPlayers.split(","));
       setCurrentChallengeType(data.val().challenges[data.val().atQuestion].type);
       if (data.val().status === 'lobby') { setRoomState('waiting') }
-      else { setRoomState('ingame') }
+      else if (data.val().status === 'win') {
+        props.handleVictory(usernamesString)
+        props.handleDefeat('victory')
+        setRoomState('ingame')
+      } else { setRoomState('ingame') }
       setLoading(false);
     })
   }
