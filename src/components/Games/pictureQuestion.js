@@ -32,7 +32,7 @@ export default function pictureQuestion(props) {
         <Text style={styles.Text}>{question.question}</Text>
       </View>
 
-      <View>
+      <View style={styles.imageContainer}>
         <ScrollView
           style={styles.imageArea}
           horizontal={true}
@@ -46,7 +46,7 @@ export default function pictureQuestion(props) {
               return (
                 <View key={index}>
                   <Image
-                    style={{ width: 300, height: 300, borderWidth: 1, borderColor: 'black' }}
+                    style={{ width: 300, height: 300, borderWidth: 0.5, borderColor: 'black' }}
                     source={{ uri: item }} />
                 </View>
               )
@@ -87,8 +87,12 @@ const styles = StyleSheet.create({
   keyBoardContainer: {
     flex: 1
   },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   imageArea: {
-    width: '100%',
+    width: 300,
     backgroundColor: 'white',
     borderColor: '#7a42f4',
     borderWidth: 1

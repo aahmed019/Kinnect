@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Image, Alert, Button, ScrollView, TextInput, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 
 
 
@@ -17,44 +17,45 @@ const Riddle = (props) => {
   const [Guessed, setGuessed] = useState(''); //use .has, .delete, and .add
 
   return (
-    <KeyboardAvoidingView
-      style={{ backgroundColor: '#2b2d40', height: '100%' }}
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      key="user-input-section"
-      keyboardVerticalOffset={70}
-    >
-      <Text style={styles.Text}>No.{props.number + 1}</Text>
-      <Text style={styles.Title}>Answer This Riddle</Text>
-      <View style={{ height: '60%', justifyContent: 'center' }}>
-        <Text style={styles.Text}>
-          {question.riddle}
-        </Text>
-      </View>
+    <SafeAreaView>
 
-      <Text style={styles.gameText}>{question.attempts - mistake + 1} Attempts Left</Text>
 
-      <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: "2%", color: 'white' }}
-        value={Guessed}
-        onChangeText={text => setGuessed(text)}
-        placeholder='Insert your answer here'
-        keyboardType={question.answerType}
+      <KeyboardAvoidingView
+        style={{ backgroundColor: '#2b2d40', height: '100%' }}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        key="user-input-section"
+        keyboardVerticalOffset={70}
       >
-      </TextInput>
+        <Text style={styles.Text}>No.{props.number + 1}</Text>
+        <Text style={styles.Title}>Answer This Riddle</Text>
+        <View style={{ height: '60%', justifyContent: 'center' }}>
+          <Text style={styles.Text}>
+            {question.riddle}
+          </Text>
+        </View>
 
-      <Button
-        title="Submit"
-        onPress={() => {
-          Guessed == question.answer
-            ? props.rightAnswer()
-            : mistake < question.attempts
-              ? (setMistake(mistake + 1), alert("Wrong!"))
-              : props.wrongAnswer()
+        <Text style={styles.gameText}>{question.attempts - mistake + 1} Attempts Left</Text>
 
-        }} />
+        <TextInput
+          style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: "2%", color: 'white' }}
+          value={Guessed}
+          onChangeText={text => setGuessed(text)}
+          placeholder='Insert your answer here'
+          keyboardType={question.answerType}
+        >
+        </TextInput>
 
-
-    </KeyboardAvoidingView>
+        <Button
+          title="Submit"
+          onPress={() => {
+            Guessed == question.answer
+              ? props.rightAnswer()
+              : mistake < question.attempts
+                ? (setMistake(mistake + 1), alert("Wrong!"))
+                : props.wrongAnswer()
+          }} />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 

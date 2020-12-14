@@ -264,8 +264,15 @@ const Game = (props) => {
                 : page == 2
                   ?
                   <ScrollView style={styles.body}>
-                    <Text>Room Information: {JSON.stringify(gameInfo, null, 2)}</Text>
-                    <Text>Room Owner: {name}</Text>
+                    <View style={{ width: '80%' }}>
+                      <Text style={styles.gameText}>Room Owner: {name} </Text>
+                      <Text style={styles.gameText}>Room's Name: {roomName} </Text>
+                      <Text style={styles.gameText}>Capacity: {gameInfo.numOfPlayers}</Text>
+                      <Text style={styles.gameText}>Trials: {gameInfo.numOfQuestions}</Text>
+                      <Text style={styles.gameText}
+                        numberOfLines={3}>Theme: {gameInfo.name}</Text>
+                    </View>
+
                     <Button
                       title='Create Game'
                       onPress={async () => {
