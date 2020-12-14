@@ -228,7 +228,7 @@ const Lobby = (props) => {
                     <TouchableOpacity
                       style={styles.joinGameButton}
                       onPress={() => pressSubmit()}>
-                      <Text style={{ fontSize: 30, color: 'green' }}>Enter</Text>
+                      <Text style={{ fontSize: 30, color: 'green' }}> Enter </Text>
                     </TouchableOpacity>
                   </View>
                   : // LISTING ALL THE ROOMS IN THE DATABASE
@@ -323,21 +323,26 @@ const styles = StyleSheet.create({
   },
   lobby: {
     flex: 1,
-    height: '85%',
+    height: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   descriptionBox: {
-    maxHeight: '80%',
+    height: '100%',
+    width: '96%',
+    marginHorizontal: '2%',
     flex: 1,
     justifyContent: 'flex-start',
-    borderColor: 'orange',
-    borderWidth: 1
+    // borderColor: 'orange',
+    // borderWidth: 1
   },
   scrollView: {
-    borderColor: 'orange',
-    borderWidth: 1,
+    paddingBottom: 10,
+    marginBottom: 10,
+    borderBottomWidth: 3,
+    borderRadius: 20,
+    borderColor: '#3eb489',
     maxHeight: '80%',
     margin: '2.5%'
   },
@@ -345,6 +350,8 @@ const styles = StyleSheet.create({
     marginLeft: '2.5%',
     marginRight: '2.5%',
     marginBottom: 0,
+    paddingHorizontal: 5,
+    color: 'white',
     height: 40,
     borderColor: 'orange',
     borderWidth: 1
@@ -352,7 +359,9 @@ const styles = StyleSheet.create({
   joinGameButton: {
     height: 40,
     borderWidth: 1,
-    borderColor: 'green'
+    borderRadius: 10,
+    borderColor: 'green',
+    marginBottom: '2%'
   },
   horizonBox: {
     flexDirection: "row",
