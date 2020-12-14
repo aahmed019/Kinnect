@@ -78,7 +78,8 @@ export default function GameRoom(props) {
       Fire.db.getRef("games/" + props.gameID).update({ "atQuestion": roomInfo.atQuestion + 1 })
     } else { // if last question
       Fire.db.getRef("games/" + props.gameID).update({ "status": "win" })
-      props.handleVictory(usernamesString)
+      props.handleVictory(users)
+      // console.log("List of Winner: ", usernamesString)
       props.handleDefeat('victory')
     }
 

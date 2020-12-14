@@ -14,6 +14,8 @@ const Game = (props) => {
   // NEW GAME DATA
   const [name, setName] = useState('')
   const [roomName, setRoomName] = useState('')
+  const [endGame, setEndGame] = useState('yeet')
+  const [winners, setWinners] = useState([])
   const [gameInfo, setGameInfo] = useState({})
   const [playerID, setPlayerID] = useState('')
   const [created, setCreated] = useState(false)
@@ -169,14 +171,55 @@ const Game = (props) => {
   //-----------------------------------END OF HELPER FUNCTIONS-----------------------------------
   if (created) {
     return (
-      <View style={styles.container}>
-        <GameRoom
-          isHost={true}
-          username={name}
-          gameID={gameCode}
-          home={props.home}
-        />
-      </View>)
+      <SafeAreaView style={styles.container}>
+        {endGame === 'yeet'
+          ?
+          <View style={styles.container}>
+            {console.log("Endgame State: ", endGame)}
+            <GameRoom
+              isHost={true}
+              username={name}
+              gameID={gameCode}
+              home={props.home}
+              handleVictory={setWinners}
+              handleDefeat={setEndGame}
+            />
+          </View>
+          : endGame === 'defeat'
+            ?
+            <View style={styles.defeatContainer}>
+              {/* {console.log("Endgame State: ", endGame)} */}
+              <Text
+                style={styles.endGameTitle}
+                onPress={() => { props.home(false) }}
+              >Defeated</Text>
+
+            </View>
+            :
+            <View style={styles.victoryContainer}>
+              {console.log("Endgame State: ", endGame)}
+              <Text style={styles.endGameTitle}>Victory</Text>
+
+              {console.log("Winners are: ", winners)}
+              <ScrollView style={styles.winnerBox}>
+                {winners.map((user, idx) => {
+                  if (user !== '') {
+                    return (
+                      <View style={styles.horizontalBox} key={idx}>
+                        <Image style={{ width: 40, height: 40, marginRight: 10 }} source={require('../images/human.png')} />
+                        <Text style={styles.text}>{user}</Text>
+                      </View>
+                    )
+                  } else { null }
+                })}
+              </ScrollView>
+              <Text
+                style={styles.text}
+                onPress={() => { props.home(false) }}
+              >←</Text>
+            </View>}
+      </SafeAreaView>
+    )
   }
   else {
     return (
@@ -376,6 +419,41 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'white',
     textAlign: 'center',
+  },
+  defeatContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-evenly'
+  },
+  victoryContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  winnerBox: {
+    maxHeight: '50%',
+    width: '90%',
+    marginHorizontal: '5%',
+  },
+  horizontalBox: {
+    flexDirection: "row",
+    width: '100%',
+    paddingHorizontal: '3%',
+    alignContent: 'center',
+    alignItems: 'center',
+    height: 60
+  },
+  endGameTitle: {
+    fontSize: 60,
+    width: '100%',
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '900',
+  },
+  text: {
+    fontSize: 30,
+    color: 'white'
   }
 })
 export default Game;

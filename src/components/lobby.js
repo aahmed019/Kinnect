@@ -125,18 +125,38 @@ const Lobby = (props) => {
               </View>
               : endGame === 'defeat'
                 ?
-                <View>
-                  {console.log("Endgame State: ", endGame)}
-                  <Text style={styles.title}>Defeated</Text>
-                  <Text style={styles.text}>YOU'RE DEAD!</Text>
-                  <Button title="Back" onPress={() => { props.home(false) }} />
+                <View style={styles.defeatContainer}>
+                  {/* {console.log("Endgame State: ", endGame)} */}
+                  <Text
+                    style={styles.endGameTitle}
+                    onPress={() => { props.home(false) }}
+                  >Defeated</Text>
+
                 </View>
                 :
-                <View>
+                <View style={styles.victoryContainer}>
                   {console.log("Endgame State: ", endGame)}
-                  <Text style={styles.title}>Victory</Text>
-                  <Text style={styles.text}>Congratulations on clearing the game!</Text>
-                  <Button title="Back" onPress={() => { props.home(false) }} />
+                  <Text style={styles.endGameTitle}>Victory</Text>
+
+                  {console.log("Winners are: ", winners)}
+                  <ScrollView style={styles.winnerBox}>
+                    {winners.map((user, idx) => {
+                      if (user !== '') {
+                        null
+                      } else {
+                        return (
+                          <View style={styles.horizontalBox} key={idx}>
+                            <Image style={{ width: 40, height: 40, marginRight: 10 }} source={require('../images/human.png')} />
+                            <Text style={styles.text}>{user}</Text>
+                          </View>
+                        )
+                      }
+                    })}
+                  </ScrollView>
+                  <Text
+                    style={styles.text}
+                    onPress={() => { props.home(false) }}
+                  >←</Text>
                 </View>
             : // LOBBY
             <View style={styles.container}>
@@ -220,7 +240,7 @@ const Lobby = (props) => {
                             {item.name}
                           </Text>
                           <View style={styles.horizonBox}>
-                            <Image style={{ width: 30, height: 30 }} source={require('../images/human.png')} />
+                            <Image style={{ width: 30, height: 30, marginRight: 5 }} source={require('../images/human.png')} />
                             <Text style={styles.text}>
                               {item.playerCount}/{item.capacity}
                             </Text>
@@ -259,6 +279,30 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     backgroundColor: '#2b2d40'
+  },
+  defeatContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-evenly'
+  },
+  victoryContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  winnerBox: {
+    maxHeight: '50%',
+    width: '90%',
+    marginHorizontal: '5%',
+  },
+  horizontalBox: {
+    flexDirection: "row",
+    width: '100%',
+    paddingHorizontal: '3%',
+    alignContent: 'center',
+    alignItems: 'center',
+    height: 60
   },
   backButtonArea: {
     position: 'absolute',
@@ -319,14 +363,17 @@ const styles = StyleSheet.create({
   },
   singleGame: {
     flexDirection: "row",
-    width: '100%',
+    width: '94%',
     height: 100,
-    paddingLeft: '2%',
+    marginHorizontal: '3%',
     justifyContent: 'space-between',
     alignContent: 'center',
     alignItems: 'center',
-    borderColor: 'green',
-    borderWidth: 1,
+    paddingBottom: 20,
+    marginBottom: 10,
+    borderBottomWidth: 3,
+    borderRadius: 20,
+    borderColor: '#3eb489',
     backgroundColor: '#2b2d40'
   },
   title: {
@@ -336,10 +383,19 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '900',
   },
+  endGameTitle: {
+    fontSize: 60,
+    width: '100%',
+    textAlign: 'center',
+    color: 'white',
+    fontWeight: '900',
+  },
   roomName: {
     width: '40%',
     fontSize: 30,
-    color: 'white'
+    marginHorizontal: '2%',
+    color: 'white',
+    fontWeight: '700'
   },
   joinButtonArea: {
     width: 50
