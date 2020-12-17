@@ -195,9 +195,11 @@ const Lobby = (props) => {
                   <Image style={styles.backButtonImage} source={require('../images/refresh.png')} />
                 </TouchableOpacity>
                 {/* LOBBY - THEME OF THE GAME */}
-                <Text style={styles.title}>
-                  {joining ? theme : "Lobby"}
-                </Text>
+                <View style={{ width: '90%', marginHorizontal: '5%' }}>
+                  <Text style={styles.title}>
+                    {joining ? theme : "Lobby"}
+                  </Text>
+                </View>
               </View>
               {
                 joining
