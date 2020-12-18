@@ -48,8 +48,8 @@ const Lobby = (props) => {
 
   useEffect(() => {
     fetchData();
-    // return detachListener();
-  }, []);
+    return detachListener();
+  }, [roomInfo]);
 
   canUserJoinGame = async (gameID) => {
     console.log('Checking if game is valid...');

@@ -22,11 +22,20 @@ const Support = (props) => {
       </View>
       <ScrollView style={{ maxHeight: '90%', paddingHorizontal: '5%' }}>
         <Text style={styles.text}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem, vel molestie sapien. Vivamus blandit gravida lorem, id ultrices urna elementum vitae. Nunc rhoncus finibus pellentesque. Quisque eu auctor justo. Proin ultrices, lorem sit amet commodo finibus, turpis odio commodo orci, eu accumsan diam erat a turpis. Maecenas eu feugiat enim, id ultricies velit. Maecenas lobortis velit a cursus auctor. In luctus rhoncus purus eu auctor. Integer aliquam nibh sit amet aliquam suscipit. Vivamus dignissim eros non orci rhoncus, eu ornare urna tincidunt. Nunc et ex gravida, imperdiet odio nec, mollis sem. Donec convallis ullamcorper felis id tempor. Curabitur non ipsum dapibus, tempor elit et, iaculis ex. Pellentesque blandit egestas dui, sed placerat.
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem,
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem, vel molestie sapien. Vivamus blandit gravida lorem, id ultrices urna elementum vitae. Nunc rhoncus finibus pellentesque. Quisque eu auctor justo. Proin ultrices, lorem sit amet commodo finibus, turpis odio commodo orci, eu accumsan diam erat a turpis. Maecenas eu feugiat enim, id ultricies velit. Maecenas lobortis velit a cursus auctor. In luctus rhoncus purus eu auctor. Integer aliquam nibh sit amet aliquam suscipit. Vivamus dignissim eros non orci rhoncus, eu ornare urna tincidunt. Nunc et ex gravida, imperdiet odio nec, mollis sem. Donec convallis ullamcorper felis id tempor. Curabitur non ipsum dapibus, tempor elit et, iaculis ex. Pellentesque blandit egestas dui, sed placerat.
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in aliquam neque. Proin quis hendrerit lorem,
-          
+          <Text style={styles.textTitle}>
+            Ali Ahmed {"&"} Lam Tran {"\n"}- Project Owner {"&"} Scrum Master {"\n"}
+          </Text>
+
+          Determine Number of Pages. Design Each Page (Code)! Then Connect Them Together. Handle Data from Mock API/.JSON files  {"\n"} {"\n"}
+          <Text style={styles.textTitle}>
+            Aqsa Malik - Graphic Designer {"\n"}
+          </Text>
+          Come up with the layout of game. Created the wireframe in Adobe Xd. Collaborative and effective design process. User friendly app. {"\n"} {"\n"}
+          <Text style={styles.textTitle}>
+            Jose Vargas - Story Teller {"\n"}
+          </Text>
+          Find/Create a story or riddle that would serve as the Game’s main objective. Include/Design challenging yet entertaining, multiplayer co-op mini games. Research mobile devices’ input capabilities. Research open-source libraries that provide an interface to access and implement such input capabilities.Design mini games that incorporate creative input controls.
+
         </Text>
       </ScrollView>
     </SafeAreaView>
@@ -67,7 +76,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Gill Sans',
     fontSize: 20,
   },
-
+  textTitle: {
+    fontWeight: '500',
+    fontSize: 25,
+    color: 'white',
+    fontFamily: 'Gill Sans',
+  }
 })
 
 
