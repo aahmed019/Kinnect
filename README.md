@@ -1,6 +1,6 @@
 # Kinnect
 
-> A game meant to connect you with others and solve creative puzzles
+> A multiplayer game meant to connect you with others and solve puzzles.
 
 ## Table of Contents
 
@@ -30,12 +30,28 @@
 - Execute the following command on your terminal in the directory of where the local repo is found in your machine
 
 ``` npm install ```
+``` npm install expo-cli ```
 
-## Features
 
-## FAQ
+## Run on your mobile device
 
-## Support
+To use Kinnect on your iOS device (Android not supported), install the Expo App. 
+
+Next you need to execute the following command on your terminal ``` expo start ``` or ``` npm start``` in the directory of where the local repo is found in your machine.
+
+Once Expo has completely loaded the application, there will be a QR code which you can use either the Expo application or your iPhones camera to load the app onto your phone.
+
+These steps must be done every time you wish to run the application.
+
+## Cool Expo tips
+
+If for any reason the application crashes, you can shake your phone to open the developer tools. This will allow you to refresh your current instance.
+
+## Ending the Expo Session
+
+Simply closing the tab is sufficent to ending the Expo session and exiting the terminal, however using CTRL + C on your terminal is an alternative.
+
+On your mobile device, the last active session will still be avaiable until you exit the Expo App.
 
 ## Contributors
 
