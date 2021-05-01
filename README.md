@@ -5,9 +5,6 @@
 ## Table of Contents
 
 - [Installation](#installation)
-- [Features](#features)
-- [FAQ](#faq)
-- [Support](#support)
 - [Contributors](#contributors)
 
 
@@ -45,7 +42,8 @@ These steps must be done every time you wish to run the application.
 
 ## Cool Expo tips
 
-If for any reason the application crashes, you can shake your phone to open the developer tools. This will allow you to refresh your current instance.
+* If for any reason the application crashes, you can shake your phone to open the developer tools. This will allow you to refresh your current instance.
+* Sometimes the app will freeze, restarting the Expo app on your iOS device can fix the problem in most cases, if not then reset the Kinnect app
 
 ## Ending the Expo Session
 
